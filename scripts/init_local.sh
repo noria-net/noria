@@ -33,7 +33,7 @@ noriad keys add me
 noriad init me --chain-id $CHAIN_ID > /dev/null 2>&1 
 
 # Add your freshly created account to the new chain genesis
-noriad add-genesis-account me 1000000000$DENOM > /dev/null 2>&1 
+noriad add-genesis-account me 1000000000$GAS_PRICE_DENOM,1000000000$DENOM > /dev/null 2>&1 
 
 # Generate the genesis transaction to create a new validator
 noriad gentx me 100000000$DENOM --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01 > /dev/null 2>&1
