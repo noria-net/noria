@@ -144,8 +144,8 @@
     },
     "coinmaster": {
       "params": {
-        "minters": "",
-        "denoms": ""
+        "minters": "noria1heyrp6y4q8p8z706nv4payx0f8xpqytulqaf6q",
+        "denoms": "ucrd,unoria"
       }
     },
     "crisis": {
