@@ -1,0 +1,12 @@
+{
+  "title": "Update whitelisted denoms",
+  "description": "Update whitelisted denoms",
+  "changes": [
+    {
+      "subspace": "coinmaster",
+      "key": "Denoms",
+      "value": "ucrd"
+    }
+  ],
+  "deposit": "1000000unoria"
+}

@@ -1,0 +1,67 @@
+accounts:
+  - name: mat
+    coins: [ "500000000unoria" ]
+  - name: chaos
+    coins: [ "500000000unoria" ]
+  - name: faucet
+    coins: [ "999999000000000unoria" ]
+validator:
+  name: chaos
+  staked: "400000000unoria"
+client:
+  openapi:
+    path: "docs/static/openapi.yml"
+  vuex:
+    path: "vue/src/store"
+faucet:
+  name: faucet
+  coins: [ "100000000unoria" ]
+  coins_max: [ "1000000000unoria" ]
+  rate_limit_window: "86400s"
+  port: 4500
+init:
+  app:
+    api:
+      swagger: true
+      enable: true
+  config:
+    consensus:
+      timeout_propose: "3s"
+      timeout_propose_delta: "500ms"
+      timeout_prevote: "1s"
+      timeout_prevote_delta: "500ms"
+      timeout_precommit: "1s"
+      timeout_precommit_delta: "500ms"
+      timeout_commit: "5s"
+genesis:
+  chain_id: "oasis-3"
+  app_state:
+    crisis:
+      constant_fee:
+        amount: "1000"
+        denom: "unoria"
+    gov:
+      deposit_params:
+        min_deposit:
+          - { amount: "1000000", denom: "unoria" }
+        max_deposit_period: "300s"
+      voting_params:
+        voting_period: "30s"
+      tally_params:
+        quorum: "0.000001"
+    mint:
+      minter:
+        inflation: "0.0"
+        annual_provisions: "0.0"
+      params:
+        blocks_per_year: "6307200"
+        mint_denom: "unoria"
+        inflation_max: "0.0"
+        inflation_min: "0.0"
+        inflation_rate_change: "0.0"
+    staking:
+      params:
+        bond_denom: "unoria"
+    distribution:
+      params:
+        community_tax: "0.0"

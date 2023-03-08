@@ -1,0 +1,14 @@
+syntax = "proto3";
+package norianet.noria.coinmaster;
+
+import "gogoproto/gogo.proto";
+import "coinmaster/params.proto";
+// this line is used by starport scaffolding # genesis/proto/import
+
+option go_package = "github.com/noria-net/noria/x/coinmaster/types";
+
+// GenesisState defines the coinmaster module's genesis state.
+message GenesisState {
+  Params params = 1 [(gogoproto.nullable) = false];
+  // this line is used by starport scaffolding # genesis/proto/state
+}

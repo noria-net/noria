@@ -1,0 +1,33 @@
+syntax = "proto3";
+package norianet.noria.coinmaster;
+
+// this line is used by starport scaffolding # proto/tx/import
+import "cosmos/base/v1beta1/coin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/noria-net/noria/x/coinmaster/types";
+
+// Msg defines the Msg service.
+service Msg {
+      rpc Mint(MsgMint) returns (MsgMintResponse);
+  rpc Burn(MsgBurn) returns (MsgBurnResponse);
+// this line is used by starport scaffolding # proto/tx/rpc
+}
+
+message MsgMint {
+  string creator = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgMintResponse {
+}
+
+message MsgBurn {
+  string creator = 1;
+  cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
+}
+
+message MsgBurnResponse {
+}
+
+// this line is used by starport scaffolding # proto/tx/message

@@ -1,0 +1,24 @@
+FROM golang:1.19-alpine3.15 AS go-builder
+ARG arch=x86_64
+RUN set -eux; apk add --no-cache ca-certificates build-base;
+
+RUN apk add git
+# NOTE: add these to run with LEDGER_ENABLED=true
+# RUN apk add libusb-dev linux-headers
+
+WORKDIR /code
+
+RUN git config --global --add safe.directory /code
+
+# See https://github.com/CosmWasm/wasmvm/releases
+COPY ./docker/libs/* /lib/
+
+# Copy the library you want to the final location that will be found by the linker flag `-lwasmvm_muslc`
+RUN cp /lib/libwasmvm_muslc.${arch}.a /lib/libwasmvm_muslc.a
+
+ENV LEDGER_ENABLED=false
+ENV BUILD_TAGS=muslc
+ENV LINK_STATICALLY=true
+
+# force it to use static lib (from above) not standard libgo_cosmwasm.so file
+CMD [ "make", "build" ] 

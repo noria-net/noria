@@ -1,0 +1,12 @@
+{
+  "title": "Update whitelisted minters",
+  "description": "Update whitelisted minters",
+  "changes": [
+    {
+      "subspace": "coinmaster",
+      "key": "Minters",
+      "value": "noria1qrh465lh5ygkaqu0nc2wdxfv5nkmwl3xlqf7jl"
+    }
+  ],
+  "deposit": "1000000unoria"
+}

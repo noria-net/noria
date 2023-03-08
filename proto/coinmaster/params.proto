@@ -1,0 +1,14 @@
+syntax = "proto3";
+package norianet.noria.coinmaster;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/noria-net/noria/x/coinmaster/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (gogoproto.goproto_stringer) = false;
+  
+  string minters = 1 [(gogoproto.moretags) = "yaml:\"minters\""];
+  string denoms = 2 [(gogoproto.moretags) = "yaml:\"denoms\""];
+}
