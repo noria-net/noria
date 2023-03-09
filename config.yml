@@ -1,12 +1,12 @@
 accounts:
-  - name: mat
-    coins: [ "500000000unoria" ]
-  - name: chaos
-    coins: [ "500000000unoria" ]
+  - name: me
+    coins: ["500000000ucrd", "500000000unoria"]
+  - name: val1
+    coins: ["500000000unoria"]
   - name: faucet
-    coins: [ "999999000000000unoria" ]
+    coins: ["999999000000000unoria"]
 validator:
-  name: chaos
+  name: val1
   staked: "400000000unoria"
 client:
   openapi:
@@ -15,8 +15,8 @@ client:
     path: "vue/src/store"
 faucet:
   name: faucet
-  coins: [ "100000000unoria" ]
-  coins_max: [ "1000000000unoria" ]
+  coins: ["100000000ucrd"]
+  coins_max: ["1000000000ucrd"]
   rate_limit_window: "86400s"
   port: 4500
 init:
@@ -36,10 +36,34 @@ init:
 genesis:
   chain_id: "oasis-3"
   app_state:
-    crisis:
-      constant_fee:
-        amount: "1000"
-        denom: "unoria"
+    bank:
+      denom_metadata:
+        - description: The Cooperative Denom token
+          denom_units:
+            - denom: ucrd
+              exponent: 0
+              aliases:
+                - microcrd
+            - denom: crd
+              exponent: 6
+              aliases: []
+          base: ucrd
+          display: crd
+          name: CRD
+          symbol: CRD
+        - description: The native staking token of Noria
+          denom_units:
+            - denom: unoria
+              exponent: 0
+              aliases:
+                - micronoria
+            - denom: noria
+              exponent: 6
+              aliases: []
+          base: unoria
+          display: noria
+          name: NORIA
+          symbol: NORIA
     gov:
       deposit_params:
         min_deposit:
