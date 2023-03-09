@@ -126,5 +126,6 @@ test:
 	go generate ./...
 	go test ./... -v
 
+# https://github.com/rakyll/statik
 docs:
 	statik -src=./docs/static -include=*.html,*.yaml
