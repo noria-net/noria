@@ -125,3 +125,6 @@ test:
 	(which mockery || go install github.com/vektra/mockery/v2@latest)
 	go generate ./...
 	go test ./... -v
+
+docs:
+	statik -src=./docs/static -include=*.html,*.yaml

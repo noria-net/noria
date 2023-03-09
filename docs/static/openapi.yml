@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  title: HTTP API Console
+  title: Noria REST API
   name: ''
   description: ''
 paths:
@@ -19830,16 +19830,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   '/cosmwasm/wasm/v1/code/{code_id}':
@@ -20370,16 +20360,6 @@ paths:
           in: query
           required: false
           type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
-          in: query
-          required: false
-          type: boolean
       tags:
         - Query
   /cosmwasm/wasm/v1/codes/params:
@@ -20900,16 +20880,6 @@ paths:
             when key
 
             is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -21553,16 +21523,6 @@ paths:
             when key
 
             is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -22278,16 +22238,6 @@ paths:
             when key
 
             is set.
-          in: query
-          required: false
-          type: boolean
-        - name: pagination.reverse
-          description: >-
-            reverse is set to true if results are to be returned in the
-            descending order.
-
-
-            Since: cosmos-sdk 0.43
           in: query
           required: false
           type: boolean
@@ -32096,7 +32046,6 @@ paths:
                     type: string
                     title: client identifier
                   client_state:
-                    title: client state
                     type: object
                     properties:
                       '@type':
@@ -32269,6 +32218,7 @@ paths:
                             "@type": "type.googleapis.com/google.protobuf.Duration",
                             "value": "1.212s"
                           }
+                    title: client state
                 description: >-
                   IdentifiedClientState defines a client state with an
                   additional client
@@ -32516,7 +32466,6 @@ paths:
             type: object
             properties:
               consensus_state:
-                title: consensus state associated with the channel
                 type: object
                 properties:
                   '@type':
@@ -32685,6 +32634,7 @@ paths:
                         "@type": "type.googleapis.com/google.protobuf.Duration",
                         "value": "1.212s"
                       }
+                title: consensus state associated with the channel
               client_id:
                 type: string
                 title: client ID associated with the consensus state
@@ -53110,7 +53060,6 @@ definitions:
             type: string
             title: client identifier
           client_state:
-            title: client state
             type: object
             properties:
               '@type':
@@ -53273,6 +53222,7 @@ definitions:
                     "@type": "type.googleapis.com/google.protobuf.Duration",
                     "value": "1.212s"
                   }
+            title: client state
         description: |-
           IdentifiedClientState defines a client state with an additional client
           identifier field.
@@ -53315,7 +53265,6 @@ definitions:
     type: object
     properties:
       consensus_state:
-        title: consensus state associated with the channel
         type: object
         properties:
           '@type':
@@ -53472,6 +53421,7 @@ definitions:
                 "@type": "type.googleapis.com/google.protobuf.Duration",
                 "value": "1.212s"
               }
+        title: consensus state associated with the channel
       client_id:
         type: string
         title: client ID associated with the consensus state
