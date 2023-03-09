@@ -264,7 +264,7 @@
         "annual_provisions": "0.000000000000000000"
       },
       "params": {
-        "mint_denom": "stake",
+        "mint_denom": "unoria",
         "inflation_rate_change": "0.0",
         "inflation_max": "0.200000000000000000",
         "inflation_min": "0.0",
