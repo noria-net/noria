@@ -290,7 +290,7 @@
         "max_validators": 100,
         "max_entries": 7,
         "historical_entries": 10000,
-        "bond_denom": "stake"
+        "bond_denom": "unoria"
       },
       "last_total_power": "0",
       "last_validator_powers": [],
