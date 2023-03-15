@@ -5,13 +5,10 @@
 # and prepares everything to be able to generate a gentx
 # to be part of the genesis validator set.
 
-# Setting $MONIKER or $KEYRING before calling this script
-# will use those values, instead of the defaults specified below
-
 # Enter your validator moniker here
-MONIKER="${MONIKER:-me}"
+MONIKER="me"
 # Customise your keyring
-KEYRING="${KEYRING:-os}"
+KEYRING="os"
 # Customize your BINARY HOME
 BINARY_HOME="$HOME/.noria"
 
