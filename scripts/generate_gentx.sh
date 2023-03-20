@@ -7,12 +7,10 @@
 
 # Enter your validator moniker here
 MONIKER="me"
-
-# Customize your BINARY HOME
-BINARY_HOME="$HOME/.noria"
-
 # Customise your keyring
 KEYRING="os"
+# Customize your BINARY HOME
+BINARY_HOME="$HOME/.noria"
 
 # Customise your validator commission rates
 COMMISSION_RATE=0.05
