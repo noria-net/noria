@@ -91,11 +91,20 @@
           ]
         },
         {
-<<<<<<< HEAD
           "address": "noria1v6fah02wy4ynruspm2pqyptaphn8p3gjqa95jz",
-=======
+	  "coins": [
+            {
+              "denom": "ucrd",
+              "amount": "5000000"
+            },
+            {
+              "denom": "unoria",
+              "amount": "100000000000"
+            }
+          ]
+	},
+	{
           "address": "noria1jll90s3hvm9nc06huvymv5q9a088l3f40f220u",
->>>>>>> main
           "coins": [
             {
               "denom": "ucrd",
