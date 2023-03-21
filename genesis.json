@@ -122,11 +122,11 @@
           "coins": [
             {
               "denom": "ucrd",
-              "amount": "248000000000000"
+              "amount": "247999975000000"
             },
             {
               "denom": "unoria",
-              "amount": "248000000000000"
+              "amount": "247500000000000"
             }
           ]
         },
@@ -186,11 +186,11 @@
       "supply": [
         {
           "denom": "ucrd",
-          "amount": "250000025000000"
+          "amount": "250000000000000"
         },
         {
           "denom": "unoria",
-          "amount": "250500000000000"
+          "amount": "250000000000000"
         }
       ],
       "denom_metadata": [
