@@ -44,6 +44,13 @@
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "noria1cqa782cjft74v3tmxr785tuw5awpl9ufkdpfw6",
+          "pub_key": null,
+          "account_number": "0",
+          "sequence": "0"
         }
       ]
     },
@@ -81,16 +88,29 @@
               "amount": "2000000000000"
             }
           ]
+        },
+        {
+          "address": "noria1cqa782cjft74v3tmxr785tuw5awpl9ufkdpfw6",
+          "coins": [
+            {
+              "denom": "ucrd",
+              "amount": "5000000"
+            },
+            {
+              "denom": "unoria",
+              "amount": "100000000000"
+            }
+          ]
         }
       ],
       "supply": [
         {
           "denom": "ucrd",
-          "amount": "250000000000000"
+          "amount": "250000005000000"
         },
         {
           "denom": "unoria",
-          "amount": "250000000000000"
+          "amount": "250100000000000"
         }
       ],
       "denom_metadata": [
