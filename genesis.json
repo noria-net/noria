@@ -45,14 +45,14 @@
           "account_number": "0",
           "sequence": "0"
         },
-	{
+        {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
           "address": "noria1v6fah02wy4ynruspm2pqyptaphn8p3gjqa95jz",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
-	},
-	{
+        },
+        {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
           "address": "noria1jll90s3hvm9nc06huvymv5q9a088l3f40f220u",
           "pub_key": null,
@@ -62,6 +62,13 @@
         {
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
           "address": "noria1cqa782cjft74v3tmxr785tuw5awpl9ufkdpfw6",
+          "pub_key": null,
+          "account_number": "0",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "noria1zm4s4m5yrshmwngwknn7dusfssge7587a02zjq",
           "pub_key": null,
           "account_number": "0",
           "sequence": "0"
@@ -78,6 +85,19 @@
       },
       "balances": [
         {
+          "address": "noria1zm4s4m5yrshmwngwknn7dusfssge7587a02zjq",
+          "coins": [
+            {
+              "denom": "ucrd",
+              "amount": "5000000"
+            },
+            {
+              "denom": "unoria",
+              "amount": "100000000000"
+            }
+          ]
+        },
+        {
           "address": "noria1g76c54v855ekemsktmdlhdewx4yez7wpqa83an",
           "coins": [
             {
@@ -92,7 +112,7 @@
         },
         {
           "address": "noria1v6fah02wy4ynruspm2pqyptaphn8p3gjqa95jz",
-	  "coins": [
+          "coins": [
             {
               "denom": "ucrd",
               "amount": "5000000"
@@ -102,8 +122,8 @@
               "amount": "100000000000"
             }
           ]
-	},
-	{
+        },
+        {
           "address": "noria1jll90s3hvm9nc06huvymv5q9a088l3f40f220u",
           "coins": [
             {
@@ -146,11 +166,11 @@
       "supply": [
         {
           "denom": "ucrd",
-          "amount": "250000015000000"
+          "amount": "250000020000000"
         },
         {
           "denom": "unoria",
-          "amount": "250300000000000"
+          "amount": "250400000000000"
         }
       ],
       "denom_metadata": [
