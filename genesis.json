@@ -47,6 +47,13 @@
         },
 	{
           "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "noria1v6fah02wy4ynruspm2pqyptaphn8p3gjqa95jz",
+          "pub_key": null,
+          "account_number": "0",
+          "sequence": "0"
+	},
+	{
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
           "address": "noria1jll90s3hvm9nc06huvymv5q9a088l3f40f220u",
           "pub_key": null,
           "account_number": "0",
@@ -84,7 +91,11 @@
           ]
         },
         {
+<<<<<<< HEAD
+          "address": "noria1v6fah02wy4ynruspm2pqyptaphn8p3gjqa95jz",
+=======
           "address": "noria1jll90s3hvm9nc06huvymv5q9a088l3f40f220u",
+>>>>>>> main
           "coins": [
             {
               "denom": "ucrd",
