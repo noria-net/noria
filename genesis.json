@@ -289,7 +289,7 @@
                 "description": {
                   "moniker": "av_noria_1",
                   "identity": "",
-                  "website": "https://afrivalidator.co.za/",
+                  "website": "",
                   "security_contact": "",
                   "details": ""
                 },
@@ -350,7 +350,7 @@
                 "description": {
                   "moniker": "NextNet.Works",
                   "identity": "",
-                  "website": "https://www.nextnet.works/",
+                  "website": "",
                   "security_contact": "",
                   "details": "NextNet.Works"
                 },
@@ -411,7 +411,7 @@
                 "description": {
                   "moniker": "NextNet.Works-3",
                   "identity": "",
-                  "website": "https://www.nextnet.works/",
+                  "website": "",
                   "security_contact": "",
                   "details": "NextNet.Works"
                 },
@@ -472,7 +472,7 @@
                 "description": {
                   "moniker": "cryptech",
                   "identity": "",
-                  "website": "https://cryptech.dev/",
+                  "website": "",
                   "security_contact": "",
                   "details": ""
                 },
@@ -533,7 +533,7 @@
                 "description": {
                   "moniker": "NextNet.Works-2",
                   "identity": "",
-                  "website": "https://www.nextnet.works/",
+                  "website": "",
                   "security_contact": "",
                   "details": "NextNet.Works"
                 },
