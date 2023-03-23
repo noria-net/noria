@@ -22,5 +22,4 @@ Please visit Noria's documentation site for information on
 - Building on Noria
 - Developing, testing, and deploying CosmWasm smart contracts
 
-
 Noria Documentation: https://noria.notaku.site/
