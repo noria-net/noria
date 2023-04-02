@@ -7,3 +7,6 @@ build/
 mocks/
 *.test
 tools/
+
+# Exclude vim swap files
+*.swp
