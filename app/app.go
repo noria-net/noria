@@ -117,6 +117,10 @@ import (
 	coinmastermoduletypes "github.com/noria-net/noria/x/coinmaster/types"
 	coinmastermodulewasm "github.com/noria-net/noria/x/coinmaster/wasm"
 
+	"github.com/CosmWasm/token-factory/x/tokenfactory"
+	tokenfactorykeeper "github.com/CosmWasm/token-factory/x/tokenfactory/keeper"
+	tokenfactorytypes "github.com/CosmWasm/token-factory/x/tokenfactory/types"
+
 	// unnamed import of statik for swagger UI support
 	_ "github.com/noria-net/noria/statik"
 )
@@ -212,6 +216,7 @@ var (
 		ica.AppModuleBasic{},
 		intertx.AppModuleBasic{},
 		coinmastermodule.AppModuleBasic{},
+		tokenfactory.NewAppModuleBasic(),
 	)
 
 	// module account permissions
@@ -226,6 +231,7 @@ var (
 		icatypes.ModuleName:              nil,
 		wasm.ModuleName:                  {authtypes.Burner},
 		coinmastermoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		tokenfactorytypes.ModuleName:     {authtypes.Minter, authtypes.Burner},
 	}
 )
 
@@ -250,7 +256,7 @@ type WasmApp struct {
 
 	// keepers
 	accountKeeper       authkeeper.AccountKeeper
-	bankKeeper          bankkeeper.Keeper
+	bankKeeper          bankkeeper.BaseKeeper
 	capabilityKeeper    *capabilitykeeper.Keeper
 	stakingKeeper       stakingkeeper.Keeper
 	slashingKeeper      slashingkeeper.Keeper
@@ -269,6 +275,7 @@ type WasmApp struct {
 	feeGrantKeeper      feegrantkeeper.Keeper
 	authzKeeper         authzkeeper.Keeper
 	wasmKeeper          wasm.Keeper
+	TokenFactoryKeeper  tokenfactorykeeper.Keeper
 
 	scopedIBCKeeper           capabilitykeeper.ScopedKeeper
 	scopedICAHostKeeper       capabilitykeeper.ScopedKeeper
@@ -326,6 +333,7 @@ func NewWasmApp(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
 		feegrant.StoreKey, authzkeeper.StoreKey, wasm.StoreKey, icahosttypes.StoreKey, icacontrollertypes.StoreKey, intertxtypes.StoreKey,
 		coinmastermoduletypes.StoreKey,
+		tokenfactorytypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -446,6 +454,15 @@ func NewWasmApp(
 	)
 	coinmasterModule := coinmastermodule.NewAppModule(appCodec, app.CoinmasterKeeper, app.accountKeeper, app.bankKeeper)
 
+	tokenFactoryKeeper := tokenfactorykeeper.NewKeeper(
+		keys[tokenfactorytypes.StoreKey],
+		app.getSubspace(tokenfactorytypes.ModuleName),
+		app.accountKeeper,
+		app.bankKeeper,
+		app.distrKeeper,
+	)
+	app.TokenFactoryKeeper = tokenFactoryKeeper
+
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.stakingKeeper = *stakingKeeper.SetHooks(
@@ -534,11 +551,13 @@ func NewWasmApp(
 
 	// The last arguments can contain custom message handlers, and custom query handlers,
 	// if we want to allow any custom callbacks
-	supportedFeatures := "iterator,staking,stargate,coinmaster,cosmwasm_1_1"
+	supportedFeatures := "iterator,staking,stargate,coinmaster,cosmwasm_1_1,token_factory"
 
 	encoders := wasmkeeper.DefaultEncoders(appCodec, app.transferKeeper)
 	mergedEncoders := encoders.Merge(coinmastermodulewasm.NewMessageEncoders())
 	wasmOpts = append(wasmOpts, wasmkeeper.WithMessageEncoders(&mergedEncoders))
+	// TODO: create wasm bindings for token factory
+	// wasmOpts = append(bindings.RegisterCustomPlugins(&app.bankKeeper, &app.TokenFactoryKeeper), wasmOpts...)
 
 	app.wasmKeeper = wasm.NewKeeper(
 		appCodec,
@@ -619,6 +638,7 @@ func NewWasmApp(
 		icaModule,
 		interTxModule,
 		coinmasterModule,
+		tokenfactory.NewAppModule(app.TokenFactoryKeeper, app.accountKeeper, app.bankKeeper),
 		crisis.NewAppModule(&app.crisisKeeper, skipGenesisInvariants), // always be last to make sure that it checks for all invariants and not only part of them
 	)
 
@@ -650,6 +670,7 @@ func NewWasmApp(
 		intertxtypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
+		tokenfactorytypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -676,6 +697,7 @@ func NewWasmApp(
 		intertxtypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
+		tokenfactorytypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -707,9 +729,10 @@ func NewWasmApp(
 		ibchost.ModuleName,
 		icatypes.ModuleName,
 		intertxtypes.ModuleName,
+		coinmastermoduletypes.ModuleName,
+		tokenfactorytypes.ModuleName,
 		// wasm after ibc transfer
 		wasm.ModuleName,
-		coinmastermoduletypes.ModuleName,
 	)
 
 	// Uncomment if you want to set a custom migration order here.
@@ -951,8 +974,9 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(ibchost.ModuleName)
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
-	paramsKeeper.Subspace(wasm.ModuleName)
 	paramsKeeper.Subspace(coinmastermoduletypes.ModuleName)
+	paramsKeeper.Subspace(tokenfactorytypes.ModuleName)
+	paramsKeeper.Subspace(wasm.ModuleName)
 
 	return paramsKeeper
 }
