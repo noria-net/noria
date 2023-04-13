@@ -7,3 +7,4 @@ build/
 mocks/
 *.test
 tools/
+docs/node_modules
