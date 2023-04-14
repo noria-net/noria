@@ -815,6 +815,10 @@ func NewWasmApp(
 	app.scopedICAControllerKeeper = scopedICAControllerKeeper
 	app.scopedInterTxKeeper = scopedInterTxKeeper
 
+	// register upgrade
+	app.RegisterUpgradeHandlers(app.configurator)
+	app.setupUpgradeStoreLoaders()
+
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(fmt.Sprintf("failed to load latest version: %s", err))
@@ -826,10 +830,6 @@ func NewWasmApp(
 			tmos.Exit(fmt.Sprintf("failed initialize pinned codes %s", err))
 		}
 	}
-
-	// register upgrade
-	app.RegisterUpgradeHandlers(app.configurator)
-	app.setupUpgradeStoreLoaders()
 
 	return app
 }
