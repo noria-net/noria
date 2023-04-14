@@ -829,6 +829,7 @@ func NewWasmApp(
 
 	// register upgrade
 	app.RegisterUpgradeHandlers(app.configurator)
+	app.setupUpgradeStoreLoaders()
 
 	return app
 }
@@ -837,8 +838,26 @@ func NewWasmApp(
 func (app *WasmApp) RegisterUpgradeHandlers(cfg module.Configurator) {
 	app.upgradeKeeper.SetUpgradeHandler(
 		UpgradeName,
-		NewUpgradeHandler(app).CreateUpgradeHandler(),
+		NewUpgradeHandler(app).CreateUpgradeHandler(app),
 	)
+}
+
+// configure store loader that checks if version == upgradeHeight and applies store upgrades
+func (app *WasmApp) setupUpgradeStoreLoaders() {
+	upgradeInfo, err := app.upgradeKeeper.ReadUpgradeInfoFromDisk()
+	if err != nil {
+		panic("failed to read upgrade info from disk" + err.Error())
+	}
+
+	if app.upgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
+		return
+	}
+
+	if upgradeInfo.Name == UpgradeName {
+		app.SetStoreLoader(
+			upgradetypes.UpgradeStoreLoader(upgradeInfo.Height, GetStoreUpgrades()),
+		)
+	}
 }
 
 // Name returns the name of the App
