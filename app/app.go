@@ -118,6 +118,7 @@ import (
 	coinmastermodulewasm "github.com/noria-net/noria/x/coinmaster/wasm"
 
 	"github.com/CosmWasm/token-factory/x/tokenfactory"
+	"github.com/CosmWasm/token-factory/x/tokenfactory/bindings"
 	tokenfactorykeeper "github.com/CosmWasm/token-factory/x/tokenfactory/keeper"
 	tokenfactorytypes "github.com/CosmWasm/token-factory/x/tokenfactory/types"
 
@@ -556,8 +557,7 @@ func NewWasmApp(
 	encoders := wasmkeeper.DefaultEncoders(appCodec, app.transferKeeper)
 	mergedEncoders := encoders.Merge(coinmastermodulewasm.NewMessageEncoders())
 	wasmOpts = append(wasmOpts, wasmkeeper.WithMessageEncoders(&mergedEncoders))
-	// TODO: create wasm bindings for token factory
-	// wasmOpts = append(bindings.RegisterCustomPlugins(&app.bankKeeper, &app.TokenFactoryKeeper), wasmOpts...)
+	wasmOpts = append(wasmOpts, bindings.RegisterCustomPlugins(&app.bankKeeper, &app.TokenFactoryKeeper)...)
 
 	app.wasmKeeper = wasm.NewKeeper(
 		appCodec,

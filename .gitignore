@@ -8,3 +8,4 @@ mocks/
 *.test
 tools/
 docs/node_modules
+docs/static/openapi.yml
