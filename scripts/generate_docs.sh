@@ -1,5 +1,11 @@
  #!/usr/bin/env bash
 
+if ! command -v protoc &> /dev/null
+then
+    echo "Missing required binary: protoc"
+    exit
+fi
+
 set -eo pipefail
 
 mkdir -p ./tmp-swagger-gen
