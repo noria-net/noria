@@ -89,3 +89,7 @@ genesis:
     distribution:
       params:
         community_tax: "0.0"
+    tokenfactory:
+      params:
+        denom_creation_fee:
+          - { amount: "1000000", denom: "ucrd" }

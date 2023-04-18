@@ -5,6 +5,8 @@ build/
 .vscode/
 .DS_Store
 mocks/
+docs/node_modules
+docs/static/openapi.yml
 .test
 tools/
 

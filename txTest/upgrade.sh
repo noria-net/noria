@@ -3,7 +3,7 @@
 # Test an upgrade on your local environment
 
 HEIGHT=$1
-UPGRADE_NAME="v0.7.4"
+UPGRADE_NAME="$2"
 BINARY_DIR=".noria"
 CHAIN_ID="oasis-3"
 DENOM="unoria"
