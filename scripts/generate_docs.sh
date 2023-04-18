@@ -5,9 +5,9 @@ set -eo pipefail
 mkdir -p ./tmp-swagger-gen
 
 # move the vendor folder to a temp dir so that go list works properly
-temp_dir="f29ea6aa861dc4b083e8e48f67cce"
 if [ -d vendor ]; then
-  mv ./vendor ./$temp_dir
+  temp_dir=$(mktemp -d)
+  mv ./vendor "$temp_dir"/vendor
 fi
 
 # Get the path of the cosmos-sdk repo from go/pkg/mod
@@ -18,7 +18,8 @@ tokenfactory_dir=$(go list -f '{{ .Dir }}' -m github.com/CosmWasm/token-factory)
 
 # move the vendor folder back to ./vendor
 if [ -d $temp_dir ]; then
-  mv ./$temp_dir ./vendor
+  mv "$temp_dir"/vendor ./vendor
+  rm -rf "$temp_dir"
 fi
 
 proto_dirs=$(find ./proto "$cosmos_sdk_dir"/proto "$tokenfactory_dir"/proto -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
