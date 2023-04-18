@@ -6,6 +6,9 @@ then
     exit
 fi
 
+# NODE_URL is used to set the host in the swagger.yaml file
+NODE_URL="archive-lcd.noria.nextnet.zone"
+
 set -eo pipefail
 
 mkdir -p ./tmp-swagger-gen
@@ -51,7 +54,7 @@ yarn install
 yarn combine
 
 #Add public servers to spec file for Noria testnet and mainnet
-yq -i '."host"="archive-lcd.noria.nextnet.zone"' static/swagger.yaml
+yq -i '."host"="'"$NODE_URL"'"' static/swagger.yaml
 yq -i '."schemes"+=["https"]' static/swagger.yaml
 
 cd ../
