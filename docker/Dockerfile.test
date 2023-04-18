@@ -1,0 +1,16 @@
+FROM golang:1.19.3-buster
+SHELL ["/bin/bash", "-c"]
+COPY ./build/noriad /usr/bin/noriad
+
+COPY ./scripts/test.sh /opt/
+COPY ./scripts/init_local.sh /opt/
+RUN chmod +x /opt/*.sh
+
+# rest server
+EXPOSE 1317
+# tendermint p2p
+EXPOSE 26656
+# tendermint rpc
+EXPOSE 26657
+
+ENTRYPOINT ["/bin/bash", "/opt/test.sh" ]
