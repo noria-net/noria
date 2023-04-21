@@ -24,13 +24,13 @@ var (
 )
 
 const (
-	opWeightMsgMint = "op_weight_msg_mint"
+	opWeightMsgCoinmasterMint = "op_weight_msg_mint"
 	// TODO: Determine the simulation weight value
-	defaultWeightMsgMint int = 100
+	defaultWeightMsgCoinmasterMint int = 100
 
-	opWeightMsgBurn = "op_weight_msg_burn"
+	opWeightMsgCoinmasterBurn = "op_weight_msg_burn"
 	// TODO: Determine the simulation weight value
-	defaultWeightMsgBurn int = 100
+	defaultWeightMsgCoinmasterBurn int = 100
 
 	// this line is used by starport scaffolding # simapp/module/const
 )
@@ -70,26 +70,26 @@ func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
 	operations := make([]simtypes.WeightedOperation, 0)
 
-	var weightMsgMint int
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgMint, &weightMsgMint, nil,
+	var weightMsgCoinmasterMint int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCoinmasterMint, &weightMsgCoinmasterMint, nil,
 		func(_ *rand.Rand) {
-			weightMsgMint = defaultWeightMsgMint
+			weightMsgCoinmasterMint = defaultWeightMsgCoinmasterMint
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgMint,
-		coinmastersimulation.SimulateMsgMint(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgCoinmasterMint,
+		coinmastersimulation.SimulateMsgCoinmasterMint(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
-	var weightMsgBurn int
-	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgBurn, &weightMsgBurn, nil,
+	var weightMsgCoinmasterBurn int
+	simState.AppParams.GetOrGenerate(simState.Cdc, opWeightMsgCoinmasterBurn, &weightMsgCoinmasterBurn, nil,
 		func(_ *rand.Rand) {
-			weightMsgBurn = defaultWeightMsgBurn
+			weightMsgCoinmasterBurn = defaultWeightMsgCoinmasterBurn
 		},
 	)
 	operations = append(operations, simulation.NewWeightedOperation(
-		weightMsgBurn,
-		coinmastersimulation.SimulateMsgBurn(am.accountKeeper, am.bankKeeper, am.keeper),
+		weightMsgCoinmasterBurn,
+		coinmastersimulation.SimulateMsgCoinmasterBurn(am.accountKeeper, am.bankKeeper, am.keeper),
 	))
 
 	// this line is used by starport scaffolding # simapp/module/operation

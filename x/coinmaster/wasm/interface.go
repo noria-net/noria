@@ -30,16 +30,18 @@ func NewWasmMsgParser() WasmMsgParser {
 
 // CosmosMsg only contains mint and burn msg
 type CosmosMsg struct {
-	Mint *types.MsgMint `json:"mint,omitempty"`
-	Burn *types.MsgBurn `json:"burn,omitempty"`
+	Coinmaster *CoinmasterMsg `json:"coinmaster,omitempty"`
+}
+type CoinmasterMsg struct {
+	Mint *types.MsgCoinmasterMint `json:"mint,omitempty"`
+	Burn *types.MsgCoinmasterBurn `json:"burn,omitempty"`
 }
 
 // ParseCustom implements custom parser
 func (WasmMsgParser) ParseCustom(contractAddr sdk.AccAddress, msg json.RawMessage) ([]sdk.Msg, error) {
-	var sdkMsg CosmosMsg
-	err := json.Unmarshal(msg, &sdkMsg)
-	if err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to parse market custom msg")
+	var sdkMsg CoinmasterMsg
+	if err := json.Unmarshal(msg, &sdkMsg); err != nil {
+		return nil, sdkerrors.Wrap(ErrInvalidMsg, "Invalid Coinmaster Msg")
 	}
 
 	if sdkMsg.Mint != nil {

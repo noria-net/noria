@@ -25,7 +25,7 @@ func CmdMint() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgMint(
+			msg := types.NewMsgCoinmasterMint(
 				clientCtx.GetFromAddress().String(),
 				argAmount,
 			)

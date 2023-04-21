@@ -37,7 +37,7 @@ func Test_Burn_BaseCase(t *testing.T) {
 	bankKeeperMock.EXPECT().BurnCoins(ctx, types.ModuleName, sdk.NewCoins(burnAmount)).Return(nil).Once()
 
 	// Base case
-	resp, err := msgServer.Burn(wCtx, &types.MsgBurn{
+	resp, err := msgServer.Burn(wCtx, &types.MsgCoinmasterBurn{
 		Creator: creator,
 		Amount:  burnAmount,
 	})
@@ -70,7 +70,7 @@ func Test_Burn_MultiplePermissableDenoms(t *testing.T) {
 		bankKeeperMock.EXPECT().BurnCoins(ctx, types.ModuleName, sdk.NewCoins(burnAmount)).Return(nil).Once()
 
 		// Base case
-		resp, err := msgServer.Burn(wCtx, &types.MsgBurn{
+		resp, err := msgServer.Burn(wCtx, &types.MsgCoinmasterBurn{
 			Creator: creator,
 			Amount:  burnAmount,
 		})
@@ -95,7 +95,7 @@ func Test_Burn_DenomNotAllowed(t *testing.T) {
 	// Set single minter and single denom
 	k.SetParams(ctx, types.NewParams(creator, "Xnoria"))
 
-	_, err := msgServer.Burn(wCtx, &types.MsgBurn{
+	_, err := msgServer.Burn(wCtx, &types.MsgCoinmasterBurn{
 		Creator: creator,
 		Amount:  mintAmount,
 	})
@@ -107,7 +107,7 @@ func Test_Burn_BurnerNotAllowed(t *testing.T) {
 	k, ctx := keepertest.NewCoinmasterKeeper(t)
 	msgServer := keeper.NewMsgServerImpl(*k)
 	creator := "noria197hfvr6nfd2228xhlyykc234yhwm6tps2drjx8"
-	whitelistedCreator := "noriaWhitelistedCreator"
+	whitelistedCreator := "noria19r3350dnszl6r7r9mtlneccr9p9hpwe6fscgkz"
 	denom := "unoria"
 	wCtx := sdk.WrapSDKContext(ctx)
 
@@ -119,7 +119,7 @@ func Test_Burn_BurnerNotAllowed(t *testing.T) {
 	// Set single minter and single denom
 	k.SetParams(ctx, types.NewParams(whitelistedCreator, "unoria"))
 
-	_, err := msgServer.Burn(wCtx, &types.MsgBurn{
+	_, err := msgServer.Burn(wCtx, &types.MsgCoinmasterBurn{
 		Creator: creator,
 		Amount:  burnAmount,
 	})

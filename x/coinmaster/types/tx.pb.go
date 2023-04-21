@@ -29,23 +29,23 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-type MsgMint struct {
+type MsgCoinmasterMint struct {
 	Creator string     `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Amount  types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
 }
 
-func (m *MsgMint) Reset()         { *m = MsgMint{} }
-func (m *MsgMint) String() string { return proto.CompactTextString(m) }
-func (*MsgMint) ProtoMessage()    {}
-func (*MsgMint) Descriptor() ([]byte, []int) {
+func (m *MsgCoinmasterMint) Reset()         { *m = MsgCoinmasterMint{} }
+func (m *MsgCoinmasterMint) String() string { return proto.CompactTextString(m) }
+func (*MsgCoinmasterMint) ProtoMessage()    {}
+func (*MsgCoinmasterMint) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2f68783d02bba24b, []int{0}
 }
-func (m *MsgMint) XXX_Unmarshal(b []byte) error {
+func (m *MsgCoinmasterMint) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgMint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCoinmasterMint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgMint.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCoinmasterMint.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -55,47 +55,47 @@ func (m *MsgMint) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *MsgMint) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgMint.Merge(m, src)
+func (m *MsgCoinmasterMint) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCoinmasterMint.Merge(m, src)
 }
-func (m *MsgMint) XXX_Size() int {
+func (m *MsgCoinmasterMint) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgMint) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgMint.DiscardUnknown(m)
+func (m *MsgCoinmasterMint) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCoinmasterMint.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgMint proto.InternalMessageInfo
+var xxx_messageInfo_MsgCoinmasterMint proto.InternalMessageInfo
 
-func (m *MsgMint) GetCreator() string {
+func (m *MsgCoinmasterMint) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
 	return ""
 }
 
-func (m *MsgMint) GetAmount() types.Coin {
+func (m *MsgCoinmasterMint) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
 	return types.Coin{}
 }
 
-type MsgMintResponse struct {
+type MsgCoinmasterMintResponse struct {
 }
 
-func (m *MsgMintResponse) Reset()         { *m = MsgMintResponse{} }
-func (m *MsgMintResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgMintResponse) ProtoMessage()    {}
-func (*MsgMintResponse) Descriptor() ([]byte, []int) {
+func (m *MsgCoinmasterMintResponse) Reset()         { *m = MsgCoinmasterMintResponse{} }
+func (m *MsgCoinmasterMintResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCoinmasterMintResponse) ProtoMessage()    {}
+func (*MsgCoinmasterMintResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2f68783d02bba24b, []int{1}
 }
-func (m *MsgMintResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgCoinmasterMintResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgMintResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCoinmasterMintResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgMintResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCoinmasterMintResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -105,35 +105,35 @@ func (m *MsgMintResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *MsgMintResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgMintResponse.Merge(m, src)
+func (m *MsgCoinmasterMintResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCoinmasterMintResponse.Merge(m, src)
 }
-func (m *MsgMintResponse) XXX_Size() int {
+func (m *MsgCoinmasterMintResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgMintResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgMintResponse.DiscardUnknown(m)
+func (m *MsgCoinmasterMintResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCoinmasterMintResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgMintResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgCoinmasterMintResponse proto.InternalMessageInfo
 
-type MsgBurn struct {
+type MsgCoinmasterBurn struct {
 	Creator string     `protobuf:"bytes,1,opt,name=creator,proto3" json:"creator,omitempty"`
 	Amount  types.Coin `protobuf:"bytes,2,opt,name=amount,proto3" json:"amount"`
 }
 
-func (m *MsgBurn) Reset()         { *m = MsgBurn{} }
-func (m *MsgBurn) String() string { return proto.CompactTextString(m) }
-func (*MsgBurn) ProtoMessage()    {}
-func (*MsgBurn) Descriptor() ([]byte, []int) {
+func (m *MsgCoinmasterBurn) Reset()         { *m = MsgCoinmasterBurn{} }
+func (m *MsgCoinmasterBurn) String() string { return proto.CompactTextString(m) }
+func (*MsgCoinmasterBurn) ProtoMessage()    {}
+func (*MsgCoinmasterBurn) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2f68783d02bba24b, []int{2}
 }
-func (m *MsgBurn) XXX_Unmarshal(b []byte) error {
+func (m *MsgCoinmasterBurn) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgBurn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCoinmasterBurn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgBurn.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCoinmasterBurn.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -143,47 +143,47 @@ func (m *MsgBurn) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *MsgBurn) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgBurn.Merge(m, src)
+func (m *MsgCoinmasterBurn) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCoinmasterBurn.Merge(m, src)
 }
-func (m *MsgBurn) XXX_Size() int {
+func (m *MsgCoinmasterBurn) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgBurn) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgBurn.DiscardUnknown(m)
+func (m *MsgCoinmasterBurn) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCoinmasterBurn.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgBurn proto.InternalMessageInfo
+var xxx_messageInfo_MsgCoinmasterBurn proto.InternalMessageInfo
 
-func (m *MsgBurn) GetCreator() string {
+func (m *MsgCoinmasterBurn) GetCreator() string {
 	if m != nil {
 		return m.Creator
 	}
 	return ""
 }
 
-func (m *MsgBurn) GetAmount() types.Coin {
+func (m *MsgCoinmasterBurn) GetAmount() types.Coin {
 	if m != nil {
 		return m.Amount
 	}
 	return types.Coin{}
 }
 
-type MsgBurnResponse struct {
+type MsgCoinmasterBurnResponse struct {
 }
 
-func (m *MsgBurnResponse) Reset()         { *m = MsgBurnResponse{} }
-func (m *MsgBurnResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgBurnResponse) ProtoMessage()    {}
-func (*MsgBurnResponse) Descriptor() ([]byte, []int) {
+func (m *MsgCoinmasterBurnResponse) Reset()         { *m = MsgCoinmasterBurnResponse{} }
+func (m *MsgCoinmasterBurnResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgCoinmasterBurnResponse) ProtoMessage()    {}
+func (*MsgCoinmasterBurnResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2f68783d02bba24b, []int{3}
 }
-func (m *MsgBurnResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgCoinmasterBurnResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgBurnResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgCoinmasterBurnResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgBurnResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgCoinmasterBurnResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -193,48 +193,48 @@ func (m *MsgBurnResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, err
 		return b[:n], nil
 	}
 }
-func (m *MsgBurnResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgBurnResponse.Merge(m, src)
+func (m *MsgCoinmasterBurnResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgCoinmasterBurnResponse.Merge(m, src)
 }
-func (m *MsgBurnResponse) XXX_Size() int {
+func (m *MsgCoinmasterBurnResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgBurnResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgBurnResponse.DiscardUnknown(m)
+func (m *MsgCoinmasterBurnResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgCoinmasterBurnResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgBurnResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgCoinmasterBurnResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgMint)(nil), "norianet.noria.coinmaster.MsgMint")
-	proto.RegisterType((*MsgMintResponse)(nil), "norianet.noria.coinmaster.MsgMintResponse")
-	proto.RegisterType((*MsgBurn)(nil), "norianet.noria.coinmaster.MsgBurn")
-	proto.RegisterType((*MsgBurnResponse)(nil), "norianet.noria.coinmaster.MsgBurnResponse")
+	proto.RegisterType((*MsgCoinmasterMint)(nil), "norianet.noria.coinmaster.MsgCoinmasterMint")
+	proto.RegisterType((*MsgCoinmasterMintResponse)(nil), "norianet.noria.coinmaster.MsgCoinmasterMintResponse")
+	proto.RegisterType((*MsgCoinmasterBurn)(nil), "norianet.noria.coinmaster.MsgCoinmasterBurn")
+	proto.RegisterType((*MsgCoinmasterBurnResponse)(nil), "norianet.noria.coinmaster.MsgCoinmasterBurnResponse")
 }
 
 func init() { proto.RegisterFile("coinmaster/tx.proto", fileDescriptor_2f68783d02bba24b) }
 
 var fileDescriptor_2f68783d02bba24b = []byte{
-	// 302 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x92, 0xb1, 0x4e, 0xf3, 0x30,
-	0x14, 0x85, 0xe3, 0xff, 0xaf, 0x5a, 0x61, 0x06, 0x44, 0x60, 0x68, 0x33, 0x98, 0x2a, 0x53, 0x85,
-	0x54, 0x5b, 0x2d, 0x03, 0x7b, 0x18, 0x98, 0xb2, 0x64, 0x60, 0x40, 0x2c, 0x4e, 0x64, 0x85, 0x0c,
-	0xf1, 0x8d, 0x6c, 0x07, 0x95, 0xb7, 0xe0, 0x65, 0x78, 0x87, 0x8e, 0x1d, 0x99, 0x10, 0x4a, 0x5e,
-	0x04, 0xd9, 0x49, 0x44, 0x17, 0x94, 0x89, 0xed, 0xd8, 0x3e, 0xfe, 0xce, 0xbd, 0xf6, 0xc5, 0x17,
-	0x19, 0x14, 0xb2, 0xe4, 0xda, 0x08, 0xc5, 0xcc, 0x8e, 0x56, 0x0a, 0x0c, 0xf8, 0x0b, 0x09, 0xaa,
-	0xe0, 0x52, 0x18, 0xea, 0x04, 0xfd, 0xf1, 0x04, 0x24, 0x03, 0x5d, 0x82, 0x66, 0x29, 0xd7, 0x82,
-	0xbd, 0x6c, 0x52, 0x61, 0xf8, 0x86, 0xd9, 0xf3, 0xee, 0x6a, 0x70, 0x99, 0x43, 0x0e, 0x4e, 0x32,
-	0xab, 0xba, 0xdd, 0xf0, 0x09, 0xcf, 0x62, 0x9d, 0xc7, 0x85, 0x34, 0xfe, 0x1c, 0xcf, 0x32, 0x25,
-	0xb8, 0x01, 0x35, 0x47, 0x4b, 0xb4, 0x3a, 0x49, 0x86, 0xa5, 0x7f, 0x8b, 0xa7, 0xbc, 0x84, 0x5a,
-	0x9a, 0xf9, 0xbf, 0x25, 0x5a, 0x9d, 0x6e, 0x17, 0xb4, 0xcb, 0xa2, 0x36, 0x8b, 0xf6, 0x59, 0xf4,
-	0x0e, 0x0a, 0x19, 0x4d, 0xf6, 0x9f, 0x57, 0x5e, 0xd2, 0xdb, 0xc3, 0x73, 0x7c, 0xd6, 0xd3, 0x13,
-	0xa1, 0x2b, 0x90, 0x5a, 0xf4, 0x81, 0x51, 0xad, 0xe4, 0xdf, 0x05, 0x5a, 0xfa, 0x10, 0xb8, 0x7d,
-	0x47, 0xf8, 0x7f, 0xac, 0x73, 0xff, 0x01, 0x4f, 0x5c, 0x9b, 0x21, 0xfd, 0xf5, 0x0d, 0x69, 0x5f,
-	0x6c, 0x70, 0x3d, 0xee, 0x19, 0xf8, 0x96, 0xeb, 0xba, 0x19, 0xe1, 0x5a, 0xcf, 0x18, 0xf7, 0xb8,
-	0xee, 0xe8, 0x7e, 0xdf, 0x10, 0x74, 0x68, 0x08, 0xfa, 0x6a, 0x08, 0x7a, 0x6b, 0x89, 0x77, 0x68,
-	0x89, 0xf7, 0xd1, 0x12, 0xef, 0x71, 0x9d, 0x17, 0xe6, 0xb9, 0x4e, 0x69, 0x06, 0x25, 0x73, 0x98,
-	0xb5, 0x14, 0xa6, 0x53, 0x6c, 0xc7, 0x8e, 0xc7, 0xe6, 0xb5, 0x12, 0x3a, 0x9d, 0xba, 0x9f, 0xbe,
-	0xf9, 0x0e, 0x00, 0x00, 0xff, 0xff, 0xae, 0xbd, 0x8d, 0x9e, 0x51, 0x02, 0x00, 0x00,
+	// 304 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x92, 0xb1, 0x4e, 0xf3, 0x30,
+	0x14, 0x85, 0xe3, 0xff, 0xaf, 0x8a, 0x30, 0x13, 0x81, 0xa1, 0x0d, 0x92, 0xa9, 0x3a, 0x75, 0xa0,
+	0xb6, 0x5a, 0x90, 0xd8, 0xc3, 0xc0, 0x94, 0x25, 0x23, 0x9b, 0x13, 0x99, 0x10, 0xa4, 0xf8, 0x46,
+	0xb6, 0x83, 0xca, 0x5b, 0xf0, 0x58, 0x1d, 0x3b, 0xb2, 0x80, 0x50, 0xf2, 0x22, 0xc8, 0x4e, 0x03,
+	0x95, 0x22, 0xa4, 0xb2, 0xb0, 0x1d, 0xdb, 0xc7, 0xf7, 0xbb, 0xe7, 0xea, 0xe2, 0x93, 0x14, 0x72,
+	0x59, 0x70, 0x6d, 0x84, 0x62, 0x66, 0x45, 0x4b, 0x05, 0x06, 0xfc, 0xb1, 0x04, 0x95, 0x73, 0x29,
+	0x0c, 0x75, 0x82, 0x7e, 0x7b, 0x02, 0x92, 0x82, 0x2e, 0x40, 0xb3, 0x84, 0x6b, 0xc1, 0x9e, 0x16,
+	0x89, 0x30, 0x7c, 0xc1, 0xec, 0x7b, 0xfb, 0x35, 0x38, 0xcd, 0x20, 0x03, 0x27, 0x99, 0x55, 0xed,
+	0xed, 0xf4, 0x1e, 0x1f, 0x47, 0x3a, 0xbb, 0xf9, 0x2a, 0x13, 0xe5, 0xd2, 0xf8, 0x23, 0x7c, 0x90,
+	0x2a, 0xc1, 0x0d, 0xa8, 0x11, 0x9a, 0xa0, 0xd9, 0x61, 0xdc, 0x1d, 0xfd, 0x6b, 0x3c, 0xe4, 0x05,
+	0x54, 0xd2, 0x8c, 0xfe, 0x4d, 0xd0, 0xec, 0x68, 0x39, 0xa6, 0x2d, 0x95, 0x5a, 0x2a, 0xdd, 0x52,
+	0xa9, 0x2d, 0x17, 0x0e, 0xd6, 0xef, 0xe7, 0x5e, 0xbc, 0xb5, 0x4f, 0xcf, 0xf0, 0xb8, 0xc7, 0x89,
+	0x85, 0x2e, 0x41, 0x6a, 0xd1, 0x6b, 0x22, 0xac, 0x94, 0xfc, 0x8b, 0x26, 0x2c, 0xa7, 0x6b, 0x62,
+	0xf9, 0x86, 0xf0, 0xff, 0x48, 0x67, 0xfe, 0x23, 0x1e, 0xb8, 0x21, 0x5c, 0xd0, 0x1f, 0x67, 0x4d,
+	0x7b, 0x51, 0x82, 0xab, 0xdf, 0xb8, 0x3b, 0xa6, 0x65, 0xb9, 0xac, 0x7b, 0xb3, 0xac, 0x7b, 0x7f,
+	0xd6, 0x6e, 0xbe, 0xf0, 0x76, 0x5d, 0x13, 0xb4, 0xa9, 0x09, 0xfa, 0xa8, 0x09, 0x7a, 0x69, 0x88,
+	0xb7, 0x69, 0x88, 0xf7, 0xda, 0x10, 0xef, 0x6e, 0x9e, 0xe5, 0xe6, 0xa1, 0x4a, 0x68, 0x0a, 0x05,
+	0x73, 0x05, 0xe7, 0x52, 0x98, 0x56, 0xb1, 0x15, 0xdb, 0x5d, 0xc3, 0xe7, 0x52, 0xe8, 0x64, 0xe8,
+	0x36, 0xe7, 0xf2, 0x33, 0x00, 0x00, 0xff, 0xff, 0x7d, 0x48, 0x8f, 0x08, 0xa1, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -249,8 +249,8 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	Mint(ctx context.Context, in *MsgMint, opts ...grpc.CallOption) (*MsgMintResponse, error)
-	Burn(ctx context.Context, in *MsgBurn, opts ...grpc.CallOption) (*MsgBurnResponse, error)
+	Mint(ctx context.Context, in *MsgCoinmasterMint, opts ...grpc.CallOption) (*MsgCoinmasterMintResponse, error)
+	Burn(ctx context.Context, in *MsgCoinmasterBurn, opts ...grpc.CallOption) (*MsgCoinmasterBurnResponse, error)
 }
 
 type msgClient struct {
@@ -261,8 +261,8 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) Mint(ctx context.Context, in *MsgMint, opts ...grpc.CallOption) (*MsgMintResponse, error) {
-	out := new(MsgMintResponse)
+func (c *msgClient) Mint(ctx context.Context, in *MsgCoinmasterMint, opts ...grpc.CallOption) (*MsgCoinmasterMintResponse, error) {
+	out := new(MsgCoinmasterMintResponse)
 	err := c.cc.Invoke(ctx, "/norianet.noria.coinmaster.Msg/Mint", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -270,8 +270,8 @@ func (c *msgClient) Mint(ctx context.Context, in *MsgMint, opts ...grpc.CallOpti
 	return out, nil
 }
 
-func (c *msgClient) Burn(ctx context.Context, in *MsgBurn, opts ...grpc.CallOption) (*MsgBurnResponse, error) {
-	out := new(MsgBurnResponse)
+func (c *msgClient) Burn(ctx context.Context, in *MsgCoinmasterBurn, opts ...grpc.CallOption) (*MsgCoinmasterBurnResponse, error) {
+	out := new(MsgCoinmasterBurnResponse)
 	err := c.cc.Invoke(ctx, "/norianet.noria.coinmaster.Msg/Burn", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -281,18 +281,18 @@ func (c *msgClient) Burn(ctx context.Context, in *MsgBurn, opts ...grpc.CallOpti
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	Mint(context.Context, *MsgMint) (*MsgMintResponse, error)
-	Burn(context.Context, *MsgBurn) (*MsgBurnResponse, error)
+	Mint(context.Context, *MsgCoinmasterMint) (*MsgCoinmasterMintResponse, error)
+	Burn(context.Context, *MsgCoinmasterBurn) (*MsgCoinmasterBurnResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) Mint(ctx context.Context, req *MsgMint) (*MsgMintResponse, error) {
+func (*UnimplementedMsgServer) Mint(ctx context.Context, req *MsgCoinmasterMint) (*MsgCoinmasterMintResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Mint not implemented")
 }
-func (*UnimplementedMsgServer) Burn(ctx context.Context, req *MsgBurn) (*MsgBurnResponse, error) {
+func (*UnimplementedMsgServer) Burn(ctx context.Context, req *MsgCoinmasterBurn) (*MsgCoinmasterBurnResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Burn not implemented")
 }
 
@@ -301,7 +301,7 @@ func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 }
 
 func _Msg_Mint_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgMint)
+	in := new(MsgCoinmasterMint)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -313,13 +313,13 @@ func _Msg_Mint_Handler(srv interface{}, ctx context.Context, dec func(interface{
 		FullMethod: "/norianet.noria.coinmaster.Msg/Mint",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Mint(ctx, req.(*MsgMint))
+		return srv.(MsgServer).Mint(ctx, req.(*MsgCoinmasterMint))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _Msg_Burn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgBurn)
+	in := new(MsgCoinmasterBurn)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -331,7 +331,7 @@ func _Msg_Burn_Handler(srv interface{}, ctx context.Context, dec func(interface{
 		FullMethod: "/norianet.noria.coinmaster.Msg/Burn",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Burn(ctx, req.(*MsgBurn))
+		return srv.(MsgServer).Burn(ctx, req.(*MsgCoinmasterBurn))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -353,7 +353,7 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	Metadata: "coinmaster/tx.proto",
 }
 
-func (m *MsgMint) Marshal() (dAtA []byte, err error) {
+func (m *MsgCoinmasterMint) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -363,12 +363,12 @@ func (m *MsgMint) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgMint) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterMint) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgMint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterMint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -393,7 +393,7 @@ func (m *MsgMint) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgMintResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgCoinmasterMintResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -403,12 +403,12 @@ func (m *MsgMintResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgMintResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterMintResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgMintResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterMintResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -416,7 +416,7 @@ func (m *MsgMintResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgBurn) Marshal() (dAtA []byte, err error) {
+func (m *MsgCoinmasterBurn) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -426,12 +426,12 @@ func (m *MsgBurn) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgBurn) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterBurn) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgBurn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterBurn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -456,7 +456,7 @@ func (m *MsgBurn) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgBurnResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgCoinmasterBurnResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -466,12 +466,12 @@ func (m *MsgBurnResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgBurnResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterBurnResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgBurnResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgCoinmasterBurnResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -490,7 +490,7 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgMint) Size() (n int) {
+func (m *MsgCoinmasterMint) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -505,7 +505,7 @@ func (m *MsgMint) Size() (n int) {
 	return n
 }
 
-func (m *MsgMintResponse) Size() (n int) {
+func (m *MsgCoinmasterMintResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -514,7 +514,7 @@ func (m *MsgMintResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgBurn) Size() (n int) {
+func (m *MsgCoinmasterBurn) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -529,7 +529,7 @@ func (m *MsgBurn) Size() (n int) {
 	return n
 }
 
-func (m *MsgBurnResponse) Size() (n int) {
+func (m *MsgCoinmasterBurnResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -544,7 +544,7 @@ func sovTx(x uint64) (n int) {
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgMint) Unmarshal(dAtA []byte) error {
+func (m *MsgCoinmasterMint) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -567,10 +567,10 @@ func (m *MsgMint) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgMint: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCoinmasterMint: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgMint: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCoinmasterMint: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -659,7 +659,7 @@ func (m *MsgMint) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgMintResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgCoinmasterMintResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -682,10 +682,10 @@ func (m *MsgMintResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgMintResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCoinmasterMintResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgMintResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCoinmasterMintResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -709,7 +709,7 @@ func (m *MsgMintResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgBurn) Unmarshal(dAtA []byte) error {
+func (m *MsgCoinmasterBurn) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -732,10 +732,10 @@ func (m *MsgBurn) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgBurn: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCoinmasterBurn: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgBurn: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCoinmasterBurn: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -824,7 +824,7 @@ func (m *MsgBurn) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgBurnResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgCoinmasterBurnResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -847,10 +847,10 @@ func (m *MsgBurnResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgBurnResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgCoinmasterBurnResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgBurnResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgCoinmasterBurnResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
