@@ -36,10 +36,9 @@ func (m *CustomMessenger) DispatchMsg(ctx sdk.Context, contractAddr sdk.AccAddre
 		// leave everything else for the wrapped version
 		var contractMsg coinmastertypes.CoinmasterMsg
 		if err := json.Unmarshal(msg.Custom, &contractMsg); err != nil {
-			return nil, nil, sdkerrors.Wrap(err, "coinmaster msg")
+			return nil, nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterMsg, "requires 'coinmaster' field")
 		}
 		if contractMsg.Coinmaster == nil {
-			// return nil, nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "nil coinmaster field")
 			return m.wrapped.DispatchMsg(ctx, contractAddr, contractIBCPortID, msg)
 		}
 		coinmasterMsg := contractMsg.Coinmaster
@@ -58,7 +57,7 @@ func (m *CustomMessenger) DispatchMsg(ctx sdk.Context, contractAddr sdk.AccAddre
 func (m *CustomMessenger) mint(ctx sdk.Context, contractAddr sdk.AccAddress, msg *coinmastertypes.MsgCustomCoinmasterMint) ([]sdk.Event, [][]byte, error) {
 	bz, err := PerformMint(m.coinmaster, ctx, contractAddr, msg)
 	if err != nil {
-		return nil, nil, sdkerrors.Wrap(err, "perform mint denom")
+		return nil, nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterMintMsg, err.Error())
 	}
 	return nil, [][]byte{bz}, nil
 }
@@ -72,13 +71,13 @@ func PerformMint(f *coinmasterkeeper.Keeper, ctx sdk.Context, contractAddr sdk.A
 
 	coins, err := sdk.ParseCoinNormalized(msg.Amount)
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "coinmaster mint")
+		return nil, sdkerrors.Wrapf(coinmastertypes.ErrCoinmasterMintMsg, "unable to parse coin from 'amount' field: %s", err.Error())
 	}
 
 	msgMint := coinmastertypes.NewMsgCoinmasterMint(contractAddr.String(), coins)
 
 	if err := msgMint.ValidateBasic(); err != nil {
-		return nil, sdkerrors.Wrap(err, "failed validating MsgCoinmasterMint")
+		return nil, sdkerrors.Wrapf(coinmastertypes.ErrCoinmasterMintMsg, "failed validating MsgCoinmasterMint: %s", err.Error())
 	}
 
 	resp, err := msgServer.Mint(
@@ -86,7 +85,7 @@ func PerformMint(f *coinmasterkeeper.Keeper, ctx sdk.Context, contractAddr sdk.A
 		msgMint,
 	)
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "coinmaster mint")
+		return nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterMintMsg, err.Error())
 	}
 
 	return resp.Marshal()
@@ -96,7 +95,7 @@ func PerformMint(f *coinmasterkeeper.Keeper, ctx sdk.Context, contractAddr sdk.A
 func (m *CustomMessenger) burn(ctx sdk.Context, contractAddr sdk.AccAddress, msg *coinmastertypes.MsgCustomCoinmasterBurn) ([]sdk.Event, [][]byte, error) {
 	bz, err := PerformBurn(m.coinmaster, ctx, contractAddr, msg)
 	if err != nil {
-		return nil, nil, sdkerrors.Wrap(err, "perform burn denom")
+		return nil, nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterBurnMsg, err.Error())
 	}
 	return nil, [][]byte{bz}, nil
 }
@@ -110,13 +109,13 @@ func PerformBurn(f *coinmasterkeeper.Keeper, ctx sdk.Context, contractAddr sdk.A
 
 	coins, err := sdk.ParseCoinNormalized(msg.Amount)
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "coinmaster mint")
+		return nil, sdkerrors.Wrapf(coinmastertypes.ErrCoinmasterBurnMsg, "unable to parse coin from 'amount' field: %s", err.Error())
 	}
 
 	msgBurn := coinmastertypes.NewMsgCoinmasterBurn(contractAddr.String(), coins)
 
 	if err := msgBurn.ValidateBasic(); err != nil {
-		return nil, sdkerrors.Wrap(err, "failed validating MsgCoinmasterMint")
+		return nil, sdkerrors.Wrapf(coinmastertypes.ErrCoinmasterBurnMsg, "failed validating MsgCoinmasterMint: %s", err.Error())
 	}
 
 	// Create denom
@@ -125,7 +124,7 @@ func PerformBurn(f *coinmasterkeeper.Keeper, ctx sdk.Context, contractAddr sdk.A
 		msgBurn,
 	)
 	if err != nil {
-		return nil, sdkerrors.Wrap(err, "coinmaster burn")
+		return nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterBurnMsg, err.Error())
 	}
 
 	return resp.Marshal()

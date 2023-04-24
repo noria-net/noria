@@ -8,5 +8,7 @@ import (
 
 // x/coinmaster module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrCoinmasterMsg     = sdkerrors.Register(ModuleName, 1100, "invalid coinmaster message")
+	ErrCoinmasterMintMsg = sdkerrors.Register(ModuleName, 1101, "error with coinmaster Mint message")
+	ErrCoinmasterBurnMsg = sdkerrors.Register(ModuleName, 1102, "error with coinmaster Burn message")
 )
