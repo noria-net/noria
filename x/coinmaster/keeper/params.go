@@ -2,10 +2,9 @@ package keeper
 
 import (
 	"errors"
-	"regexp"
-	"strings"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	util "github.com/noria-net/noria/util"
 	"github.com/noria-net/noria/x/coinmaster/types"
 )
 
@@ -18,28 +17,20 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 }
 
 // SetParams set the params
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) (err error) {
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) error {
+	var err error
 	if params.Minters != "" {
 		// validate that params.Minters is a comma separated list of addresses
-		mintersRegex := (`^([a-z0-9]{40,80},)*[a-z0-9]{40,80}$`)
-
-		if match, err := regexp.MatchString(mintersRegex, params.Minters); !match || err != nil {
+		_, err = util.SplitStringIntoAddresses(params.Minters)
+		if err != nil {
 			return errors.New(Error_invalid_minter)
-		}
-
-		// validate that each minter is a valid address
-		for _, minter := range strings.Split(params.Minters, ",") {
-			_, err := sdk.AccAddressFromBech32(minter)
-			if err != nil {
-				return errors.New(Error_invalid_minter)
-			}
 		}
 	}
 
 	if params.Denoms != "" {
 		// validate that params.Denoms is a comma separated list of denoms
-		denomsRegex := `^([a-zA-Z0-9]{3,64},)*[a-zA-Z0-9]{3,64}$`
-		if match, err := regexp.MatchString(denomsRegex, params.Denoms); !match || err != nil {
+		_, err = util.SplitStringIntoDenoms(params.Denoms)
+		if err != nil {
 			return errors.New(Error_invalid_denom)
 		}
 	}
