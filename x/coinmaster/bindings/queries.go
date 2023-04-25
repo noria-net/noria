@@ -21,7 +21,7 @@ func NewQueryPlugin(k *coinmasterkeeper.Keeper) *QueryPlugin {
 func (qp QueryPlugin) GetParams(ctx sdk.Context) (*coinmastertypes.ParamsResponse, error) {
 	params := qp.coinmasterKeeper.GetParams(ctx)
 	return &coinmastertypes.ParamsResponse{
-		Params: coinmastertypes.Params{
+		Params: coinmastertypes.ParamsProperties{
 			Minters: params.Minters,
 			Denoms:  params.Denoms,
 		},

@@ -2,7 +2,6 @@ package bindings
 
 import (
 	"encoding/json"
-	"fmt"
 
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -16,7 +15,7 @@ func CustomQuerier(qp *QueryPlugin) func(ctx sdk.Context, request json.RawMessag
 	return func(ctx sdk.Context, request json.RawMessage) ([]byte, error) {
 		var contractQuery coinmastertypes.CoinmasterQuery
 		if err := json.Unmarshal(request, &contractQuery); err != nil {
-			return nil, sdkerrors.Wrap(err, "coinmaster query")
+			return nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterQuery, "failed to parse coinmaster query")
 		}
 		if contractQuery.Coinmaster == nil {
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, "nil coinmaster field")
@@ -32,7 +31,7 @@ func CustomQuerier(qp *QueryPlugin) func(ctx sdk.Context, request json.RawMessag
 
 			bz, err := json.Marshal(res)
 			if err != nil {
-				return nil, fmt.Errorf("failed to JSON marshal ParamsResponse: %w", err)
+				return nil, sdkerrors.Wrap(coinmastertypes.ErrCoinmasterQuery, "failed to marshall coinmaster ParamsResponse")
 			}
 
 			return bz, nil
