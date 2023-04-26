@@ -53,7 +53,10 @@ func NewCoinmasterKeeperWithBankKeeper(t testing.TB, bankKeeper types.BankKeeper
 	ctx := sdk.NewContext(stateStore, tmproto.Header{}, false, log.NewNopLogger())
 
 	// Initialize params
-	k.SetParams(ctx, types.DefaultParams())
+	err := k.SetParams(ctx, types.DefaultParams())
+	if err != nil {
+		panic(err)
+	}
 
 	return k, ctx
 }

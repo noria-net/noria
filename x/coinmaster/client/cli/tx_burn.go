@@ -25,7 +25,7 @@ func CmdBurn() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgBurn(
+			msg := types.NewMsgCoinmasterBurn(
 				clientCtx.GetFromAddress().String(),
 				argAmount,
 			)

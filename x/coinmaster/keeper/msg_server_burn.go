@@ -2,32 +2,27 @@ package keeper
 
 import (
 	"context"
-	"errors"
-	"strings"
 
 	"github.com/noria-net/noria/x/coinmaster/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.MsgBurnResponse, error) {
+func (k msgServer) Burn(goCtx context.Context, msg *types.MsgCoinmasterBurn) (*types.MsgCoinmasterBurnResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	minters := k.Minters(ctx)
-	if minters != types.DefaultMinters {
-		if msg.Creator != minters {
-			return nil, errors.New(Error_unauthorized_account)
-		}
+	addr, err := sdk.AccAddressFromBech32(msg.Creator)
+	if err != nil {
+		return nil, err
+	}
+
+	err = k.ValidateMinter(ctx, msg.Creator)
+	if err != nil {
+		return nil, err
 	}
 
 	coins := sdk.NewCoins(msg.Amount)
-
-	denoms := strings.Split(k.Denoms(ctx), ",")
-	if !IsDenomWhiteListed(denoms, coins[0].Denom) {
-		return nil, errors.New(Error_unauthorized_denom)
-	}
-
-	addr, err := sdk.AccAddressFromBech32(msg.Creator)
+	err = k.ValidateDenoms(ctx, coins)
 	if err != nil {
 		return nil, err
 	}
@@ -45,5 +40,5 @@ func (k msgServer) Burn(goCtx context.Context, msg *types.MsgBurn) (*types.MsgBu
 		return nil, err
 	}
 
-	return &types.MsgBurnResponse{}, nil
+	return &types.MsgCoinmasterBurnResponse{}, nil
 }

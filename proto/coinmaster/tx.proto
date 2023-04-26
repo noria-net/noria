@@ -9,25 +9,25 @@ option go_package = "github.com/noria-net/noria/x/coinmaster/types";
 
 // Msg defines the Msg service.
 service Msg {
-      rpc Mint(MsgMint) returns (MsgMintResponse);
-  rpc Burn(MsgBurn) returns (MsgBurnResponse);
+  rpc Mint(MsgCoinmasterMint) returns (MsgCoinmasterMintResponse);
+  rpc Burn(MsgCoinmasterBurn) returns (MsgCoinmasterBurnResponse);
 // this line is used by starport scaffolding # proto/tx/rpc
 }
 
-message MsgMint {
+message MsgCoinmasterMint {
   string creator = 1;
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
 }
 
-message MsgMintResponse {
+message MsgCoinmasterMintResponse {
 }
 
-message MsgBurn {
+message MsgCoinmasterBurn {
   string creator = 1;
   cosmos.base.v1beta1.Coin amount = 2 [(gogoproto.nullable) = false];
 }
 
-message MsgBurnResponse {
+message MsgCoinmasterBurnResponse {
 }
 
 // this line is used by starport scaffolding # proto/tx/message

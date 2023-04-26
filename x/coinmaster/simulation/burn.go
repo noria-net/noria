@@ -10,7 +10,7 @@ import (
 	"github.com/noria-net/noria/x/coinmaster/types"
 )
 
-func SimulateMsgBurn(
+func SimulateMsgCoinmasterBurn(
 	ak types.AccountKeeper,
 	bk types.BankKeeper,
 	k keeper.Keeper,
@@ -18,7 +18,7 @@ func SimulateMsgBurn(
 	return func(r *rand.Rand, app *baseapp.BaseApp, ctx sdk.Context, accs []simtypes.Account, chainID string,
 	) (simtypes.OperationMsg, []simtypes.FutureOperation, error) {
 		simAccount, _ := simtypes.RandomAcc(r, accs)
-		msg := &types.MsgBurn{
+		msg := &types.MsgCoinmasterBurn{
 			Creator: simAccount.Address.String(),
 		}
 

@@ -1,7 +1,10 @@
 package keeper
 
 import (
+	"errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	util "github.com/noria-net/noria/util"
 	"github.com/noria-net/noria/x/coinmaster/types"
 )
 
@@ -14,8 +17,26 @@ func (k Keeper) GetParams(ctx sdk.Context) types.Params {
 }
 
 // SetParams set the params
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) error {
+	var err error
+	if params.Minters != "" {
+		// validate that params.Minters is a comma separated list of addresses
+		_, err = util.SplitStringIntoAddresses(params.Minters)
+		if err != nil {
+			return errors.New(Error_invalid_minter)
+		}
+	}
+
+	if params.Denoms != "" {
+		// validate that params.Denoms is a comma separated list of denoms
+		_, err = util.SplitStringIntoDenoms(params.Denoms)
+		if err != nil {
+			return errors.New(Error_invalid_denom)
+		}
+	}
+
 	k.paramstore.SetParamSet(ctx, &params)
+	return nil
 }
 
 // Minters returns the Minters param

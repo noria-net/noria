@@ -113,12 +113,12 @@ import (
 	ibcclientclient "github.com/cosmos/ibc-go/v3/modules/core/02-client/client"
 	ibcclienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
 	coinmastermodule "github.com/noria-net/noria/x/coinmaster"
+	coinmasterbindings "github.com/noria-net/noria/x/coinmaster/bindings"
 	coinmastermodulekeeper "github.com/noria-net/noria/x/coinmaster/keeper"
 	coinmastermoduletypes "github.com/noria-net/noria/x/coinmaster/types"
-	coinmastermodulewasm "github.com/noria-net/noria/x/coinmaster/wasm"
 
 	"github.com/CosmWasm/token-factory/x/tokenfactory"
-	"github.com/CosmWasm/token-factory/x/tokenfactory/bindings"
+	tokenfactorybindings "github.com/CosmWasm/token-factory/x/tokenfactory/bindings"
 	tokenfactorykeeper "github.com/CosmWasm/token-factory/x/tokenfactory/keeper"
 	tokenfactorytypes "github.com/CosmWasm/token-factory/x/tokenfactory/types"
 
@@ -554,10 +554,8 @@ func NewWasmApp(
 	// if we want to allow any custom callbacks
 	supportedFeatures := "iterator,staking,stargate,coinmaster,cosmwasm_1_1,token_factory"
 
-	encoders := wasmkeeper.DefaultEncoders(appCodec, app.transferKeeper)
-	mergedEncoders := encoders.Merge(coinmastermodulewasm.NewMessageEncoders())
-	wasmOpts = append(wasmOpts, wasmkeeper.WithMessageEncoders(&mergedEncoders))
-	wasmOpts = append(wasmOpts, bindings.RegisterCustomPlugins(&app.bankKeeper, &app.TokenFactoryKeeper)...)
+	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(&app.bankKeeper, &app.TokenFactoryKeeper)...)
+	wasmOpts = append(wasmOpts, coinmasterbindings.RegisterCustomPlugins(&app.CoinmasterKeeper)...)
 
 	app.wasmKeeper = wasm.NewKeeper(
 		appCodec,
