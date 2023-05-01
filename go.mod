@@ -1,6 +1,6 @@
 module github.com/noria-net/noria
 
-go 1.19
+go 1.20
 
 require (
 	github.com/CosmWasm/wasmd v0.40.0-rc.1.0.20230424144037-55647a1fd1f9
