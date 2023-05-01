@@ -3,16 +3,16 @@ package main
 import (
 	"os"
 
-	"github.com/noria-net/noria/app"
-
 	"github.com/cosmos/cosmos-sdk/server"
 	svrcmd "github.com/cosmos/cosmos-sdk/server/cmd"
+
+	"github.com/noria-net/noria/app"
 )
 
 func main() {
 	rootCmd, _ := NewRootCmd()
 
-	if err := svrcmd.Execute(rootCmd, app.DefaultNodeHome); err != nil {
+	if err := svrcmd.Execute(rootCmd, "", app.DefaultNodeHome); err != nil {
 		switch e := err.(type) {
 		case server.ErrorCode:
 			os.Exit(e.Code)
