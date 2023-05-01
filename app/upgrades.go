@@ -2,6 +2,9 @@ package app
 
 import (
 	"github.com/cosmos/cosmos-sdk/baseapp"
+	"github.com/cosmos/cosmos-sdk/x/group"
+	"github.com/cosmos/cosmos-sdk/x/nft"
+
 	store "github.com/cosmos/cosmos-sdk/store/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,6 +23,7 @@ import (
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	icacontrollertypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/controller/types"
 	icahosttypes "github.com/cosmos/ibc-go/v7/modules/apps/27-interchain-accounts/host/types"
+	ibcfeetypes "github.com/cosmos/ibc-go/v7/modules/apps/29-fee/types"
 	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
@@ -99,7 +103,10 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 		storeUpgrades := storetypes.StoreUpgrades{
 			Added: []string{
 				consensustypes.ModuleName,
+				ibcfeetypes.ModuleName,
 				crisistypes.ModuleName,
+				group.ModuleName,
+				nft.ModuleName,
 			},
 		}
 
