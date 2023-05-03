@@ -169,7 +169,7 @@ require (
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
 
-require github.com/noria-net/token-factory v0.0.0-20230503145312-72b018abd102 // indirect
+require github.com/noria-net/token-factory v0.0.0-20230503145312-72b018abd102
 
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
