@@ -130,6 +130,11 @@ import (
 	coinmasterbindings "github.com/noria-net/noria/x/coinmaster/bindings"
 	coinmastermodulekeeper "github.com/noria-net/noria/x/coinmaster/keeper"
 	coinmastermoduletypes "github.com/noria-net/noria/x/coinmaster/types"
+
+	tokenfactorymodule "github.com/noria-net/token-factory/x/tokenfactory"
+	tokenfactorybindings "github.com/noria-net/token-factory/x/tokenfactory/bindings"
+	tokenfactorymodulekeeper "github.com/noria-net/token-factory/x/tokenfactory/keeper"
+	tokenfactorymoduletypes "github.com/noria-net/token-factory/x/tokenfactory/types"
 )
 
 const appName = "Noria"
@@ -225,7 +230,9 @@ var (
 		transfer.AppModuleBasic{},
 		ica.AppModuleBasic{},
 		ibcfee.AppModuleBasic{},
-		coinmastermodule.AppModuleBasic{})
+		coinmastermodule.AppModuleBasic{},
+		tokenfactorymodule.AppModuleBasic{},
+	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
@@ -264,7 +271,7 @@ type WasmApp struct {
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.Keeper
+	BankKeeper            bankkeeper.BaseKeeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	SlashingKeeper        slashingkeeper.Keeper
@@ -288,6 +295,7 @@ type WasmApp struct {
 	TransferKeeper      ibctransferkeeper.Keeper
 	WasmKeeper          wasm.Keeper
 	CoinmasterKeeper    coinmastermodulekeeper.Keeper
+	TokenFactoryKeeper  tokenfactorymodulekeeper.Keeper
 
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
@@ -340,6 +348,7 @@ func NewWasmApp(
 		wasm.StoreKey, icahosttypes.StoreKey,
 		icacontrollertypes.StoreKey,
 		coinmastermoduletypes.StoreKey,
+		tokenfactorymoduletypes.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -591,6 +600,17 @@ func NewWasmApp(
 		app.MsgServiceRouter(),
 	)
 
+	tokenFactoryKeeper := tokenfactorymodulekeeper.NewKeeper(
+		keys[tokenfactorymoduletypes.StoreKey],
+		app.GetSubspace(tokenfactorymoduletypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.DistrKeeper,
+	)
+	app.TokenFactoryKeeper = tokenFactoryKeeper
+
+	tokenfactoryModule := tokenfactorymodule.NewAppModule(app.appCodec, app.TokenFactoryKeeper, app.AccountKeeper, app.BankKeeper)
+
 	wasmDir := filepath.Join(homePath, "wasm")
 	wasmConfig, err := wasm.ReadWasmConfig(appOpts)
 	if err != nil {
@@ -602,6 +622,8 @@ func NewWasmApp(
 	availableCapabilities := strings.Join(AllCapabilities(), ",")
 
 	wasmOpts = append(wasmOpts, coinmasterbindings.RegisterCustomPlugins(&app.CoinmasterKeeper)...)
+	wasmOpts = append(tokenfactorybindings.RegisterCustomPlugins(&app.BankKeeper, &app.TokenFactoryKeeper), wasmOpts...)
+
 	app.WasmKeeper = wasm.NewKeeper(
 		appCodec,
 		keys[wasm.StoreKey],
@@ -697,6 +719,7 @@ func NewWasmApp(
 		consensus.NewAppModule(appCodec, app.ConsensusParamsKeeper),
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 		coinmasterModule,
+		tokenfactoryModule,
 		ibc.NewAppModule(app.IBCKeeper),
 		transfer.NewAppModule(app.TransferKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
@@ -722,6 +745,7 @@ func NewWasmApp(
 		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
+		tokenfactorymoduletypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -738,6 +762,7 @@ func NewWasmApp(
 		ibcfeetypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
+		tokenfactorymoduletypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -762,6 +787,7 @@ func NewWasmApp(
 		// wasm after ibc transfer
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
+		tokenfactorymoduletypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -1076,6 +1102,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(icahosttypes.SubModuleName)
 	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
 	paramsKeeper.Subspace(coinmastermoduletypes.ModuleName)
+	paramsKeeper.Subspace(tokenfactorymoduletypes.ModuleName)
 	paramsKeeper.Subspace(wasm.ModuleName)
 
 	return paramsKeeper
