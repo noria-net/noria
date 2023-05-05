@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	"github.com/cosmos/cosmos-sdk/x/nft"
@@ -81,10 +83,14 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 			baseapp.MigrateParams(ctx, baseAppLegacySS, &app.ConsensusParamsKeeper)
 
 			// TokenFactory
+
+			app.Logger().Info(fmt.Sprintf("TokenFactory original params: %v", app.TokenFactoryKeeper.GetParams(ctx)))
 			newTokenFactoryParams := tokenfactorytypes.Params{
 				DenomCreationFee: sdk.NewCoins(sdk.NewCoin("ucrd", sdk.NewInt(1000000))),
 			}
 			app.TokenFactoryKeeper.SetParams(ctx, newTokenFactoryParams)
+			app.Logger().Info(fmt.Sprintf("TokenFactory new params: %v", newTokenFactoryParams))
+			app.Logger().Info(fmt.Sprintf("Migrated TokenFactory params: %v", app.TokenFactoryKeeper.GetParams(ctx)))
 
 			return app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
 		},
