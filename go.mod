@@ -18,6 +18,7 @@ require (
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
+	github.com/noria-net/token-factory v1.0.0
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.15.0
 	github.com/rakyll/statik v0.1.7
@@ -168,8 +169,6 @@ require (
 	pgregory.net/rapid v0.5.5 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
-
-require github.com/noria-net/token-factory v0.0.0-20230505002859-65277ab6ff59
 
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
