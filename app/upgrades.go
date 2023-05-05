@@ -80,12 +80,6 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 		func(ctx sdk.Context, _ upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			baseapp.MigrateParams(ctx, baseAppLegacySS, &app.ConsensusParamsKeeper)
 
-			// TokenFactory
-			newTokenFactoryParams := tokenfactorytypes.Params{
-				DenomCreationFee: sdk.NewCoins(sdk.NewCoin("ucrd", sdk.NewInt(1000000))),
-			}
-			app.TokenFactoryKeeper.SetParams(ctx, newTokenFactoryParams)
-
 			return app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
 		},
 	)
