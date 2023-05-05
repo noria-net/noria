@@ -628,7 +628,7 @@ func NewWasmApp(
 	availableCapabilities := strings.Join(AllCapabilities(), ",")
 
 	wasmOpts = append(wasmOpts, coinmasterbindings.RegisterCustomPlugins(&app.CoinmasterKeeper)...)
-	wasmOpts = append(tokenfactorybindings.RegisterCustomPlugins(&app.BankKeeper, &app.TokenFactoryKeeper), wasmOpts...)
+	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(&app.BankKeeper, &app.TokenFactoryKeeper)...)
 
 	app.WasmKeeper = wasm.NewKeeper(
 		appCodec,
