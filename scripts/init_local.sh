@@ -48,6 +48,10 @@ sed -i.bak 's/"inflation_rate_change": "[^"]*"/"inflation_rate_change": "0\.0"/g
 sed -i.bak 's/"inflation_min": "[^"]*"/"inflation_min": "0\.0"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"voting_period": "[^"]*"/"voting_period": "10s"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"quorum": "[^"]*"/"quorum": "0.000001"/g' $CONFIG_HOME/genesis.json
+
+tmp=$(mktemp)
+jq '.app_state.tokenfactory.params.denom_creation_fee[0].denom = "ucrd"' $CONFIG_HOME/genesis.json > "$tmp" && mv "$tmp" $CONFIG_HOME/genesis.json
+
 rm $CONFIG_HOME/genesis.json.bak
 
 # Edit config.toml to set the block speed to 1s

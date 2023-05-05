@@ -26,6 +26,7 @@ import (
 	ibctransfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/noria-net/token-factory/x/tokenfactory"
 	tokenfactorytypes "github.com/noria-net/token-factory/x/tokenfactory/types"
 )
 
@@ -79,6 +80,18 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 		UpgradeName,
 		func(ctx sdk.Context, _ upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
 			baseapp.MigrateParams(ctx, baseAppLegacySS, &app.ConsensusParamsKeeper)
+
+			newTokenFactoryState := tokenfactorytypes.GenesisState{
+				Params: tokenfactorytypes.NewParams(sdk.NewCoins(sdk.NewInt64Coin("ucrd", 10_000_000))),
+			}
+			encoded, err := app.appCodec.MarshalJSON(&newTokenFactoryState)
+			if err != nil {
+				return nil, err
+			}
+
+			fromVM[tokenfactorytypes.ModuleName] = tokenfactory.AppModule{}.ConsensusVersion()
+			module := app.ModuleManager.Modules[tokenfactorytypes.ModuleName].(tokenfactory.AppModule)
+			module.InitGenesis(ctx, app.appCodec, encoded)
 
 			return app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
 		},
