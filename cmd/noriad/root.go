@@ -35,6 +35,7 @@ import (
 	wasmtypes "github.com/CosmWasm/wasmd/x/wasm/types"
 	"github.com/noria-net/noria/app"
 	"github.com/noria-net/noria/app/params"
+	tokenfactorytypes "github.com/noria-net/token-factory/x/tokenfactory/types"
 )
 
 // NewRootCmd creates a new root command for wasmd. It is called once in the
@@ -83,6 +84,7 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 
 			customAppTemplate, customAppConfig := initAppConfig()
 			customTMConfig := initTendermintConfig()
+			tokenfactorytypes.DefaultCreationFeeDenom = "ucrd"
 
 			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customTMConfig)
 		},
