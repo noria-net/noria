@@ -90,7 +90,7 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 			}
 
 			fromVM[tokenfactorytypes.ModuleName] = tokenfactory.AppModule{}.ConsensusVersion()
-			module := app.ModuleManager.Modules[tokenfactorytypes.ModuleName].(*tokenfactory.AppModule)
+			module := app.ModuleManager.Modules[tokenfactorytypes.ModuleName].(tokenfactory.AppModule)
 			module.InitGenesis(ctx, app.appCodec, encoded)
 
 			return app.ModuleManager.RunMigrations(ctx, app.Configurator(), fromVM)
