@@ -3,10 +3,10 @@ package bindings
 import (
 	"encoding/json"
 
+	sdkerrors "cosmossdk.io/errors"
 	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
 	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	coinmasterkeeper "github.com/noria-net/noria/x/coinmaster/keeper"
 	coinmastertypes "github.com/noria-net/noria/x/coinmaster/types"

@@ -17,12 +17,12 @@ type CoinmasterSubMsg struct {
 }
 
 type CoinmasterQuery struct {
-	Coinmaster *CoinmasterSubQuery `json:"coinmaster"`
+	Coinmaster *CoinmasterSubQuery `json:"coinmaster,omitempty"`
 }
 
 // See https://github.com/CosmWasm/token-bindings/blob/main/packages/bindings/src/query.rs
 type CoinmasterSubQuery struct {
-	Params *GetParams `json:"params"`
+	Params *GetParams `json:"params,omitempty"`
 }
 
 type GetParams struct{}

@@ -11,11 +11,9 @@ import (
 func RegisterCustomPlugins(
 	coinmasterKeeper *coinmasterkeeper.Keeper,
 ) []wasmkeeper.Option {
-	wasmQueryPlugin := NewQueryPlugin(coinmasterKeeper)
 
-	queryPluginOpt := wasmkeeper.WithQueryPlugins(&wasmkeeper.QueryPlugins{
-		Custom: CustomQuerier(wasmQueryPlugin),
-	})
+	queryPluginOpt := wasmkeeper.WithQueryHandlerDecorator(CustomQueryDecorator(coinmasterKeeper))
+
 	messengerDecoratorOpt := wasmkeeper.WithMessageHandlerDecorator(
 		CustomMessageDecorator(coinmasterKeeper),
 	)

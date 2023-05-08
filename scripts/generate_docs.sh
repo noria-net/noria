@@ -11,7 +11,10 @@ NODE_URL="archive-lcd.noria.nextnet.zone"
 
 set -eo pipefail
 
+current_dir=$(pwd)
+
 mkdir -p ./tmp-swagger-gen
+mkdir -p ./tmp-swagger-gen-proto
 
 # move the vendor folder to a temp dir so that go list works properly
 if [ -d vendor ]; then
@@ -19,37 +22,43 @@ if [ -d vendor ]; then
   mv ./vendor "$temp_dir"/vendor
 fi
 
-# Get the path of the cosmos-sdk repo from go/pkg/mod
-cosmos_sdk_dir=$(go list -f '{{ .Dir }}' -m github.com/cosmos/cosmos-sdk)
-
-# Get the path of the tokenfactory repo from go/pkg/mod
-tokenfactory_dir=$(go list -f '{{ .Dir }}' -m github.com/CosmWasm/token-factory)
-
 # move the vendor folder back to ./vendor
-if [ -d $temp_dir ]; then
+if [ -d "$temp_dir" ]; then
   mv "$temp_dir"/vendor ./vendor
   rm -rf "$temp_dir"
 fi
 
-proto_dirs=$(find ./proto "$cosmos_sdk_dir"/proto "$tokenfactory_dir"/proto -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
+# generate a full set of proto files with all dependencies
+buf export buf.build/cosmwasm/wasmd:8fdeb62caead42bd8f287577b1534a6b --output ./tmp-swagger-gen-proto
+buf export buf.build/cosmos/cosmos-sdk:14f154b98b9b4cf381a0878e8a9d4694 --output ./tmp-swagger-gen-proto
+buf export buf.build/noria-net/token-factory:42799303e69440b9b225bf1dc8f75418 --output ./tmp-swagger-gen-proto
+buf export buf.build/noria-net/noria:931e6ba8bf9a4d50ae59a711c8265799 --output ./tmp-swagger-gen-proto
+
+# copy the required buf files to the tmp dir
+cp ./proto/buf.gen.swagger.yaml ./tmp-swagger-gen-proto/
+head -n 3 ./proto/buf.yaml > ./tmp-swagger-gen-proto/buf.yaml
+cd tmp-swagger-gen-proto
+buf mod update
+cd ..
+
+# copy the tmp dir to /tmp to avoid issues already existing proto files
+cp -r tmp-swagger-gen-proto /tmp
+
+
+cd /tmp/tmp-swagger-gen-proto
+proto_dirs=$(find cosmos noria osmosis cosmwasm -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
 for dir in $proto_dirs; do
   # generate swagger files (filter query files)
   query_file=$(find "${dir}" -maxdepth 1 \( -name 'query.proto' -o -name 'service.proto' \))
   if [[ ! -z "$query_file" ]]; then
-    protoc \
-      -I "proto" \
-      -I "$cosmos_sdk_dir/third_party/proto" \
-      -I "$cosmos_sdk_dir/proto" \
-      -I "$tokenfactory_dir/proto" \
-      "$query_file" \
-      --swagger_out ./tmp-swagger-gen \
-      --swagger_opt logtostderr=true \
-      --swagger_opt fqn_for_swagger_name=true \
-      --swagger_opt simple_operation_ids=true
+    echo "Generating swagger for $query_file in $dir"
+    buf generate --template buf.gen.swagger.yaml $query_file
   fi
 done
 
-cd ./docs
+cp -r /tmp/tmp-swagger-gen $current_dir/
+cd $current_dir/docs
+
 yarn install
 yarn combine
 
@@ -60,7 +69,7 @@ yq -i '."schemes"+=["https"]' static/swagger.yaml
 cd ../
 
 # clean swagger files
-rm -rf ./tmp-swagger-gen
+rm -rf ./tmp-swagger-gen*
 
 # generate new statik docs for go
 statik -src=./docs/static -include=*.html,*.yaml

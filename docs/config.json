@@ -3,11 +3,11 @@
   "info": {
     "title": "NORIA REST API",
     "description": "A REST interface for state queries",
-    "version": "1.0.0"
+    "version": "1.2.0"
   },
   "apis": [
     {
-      "url": "../tmp-swagger-gen/coinmaster/query.swagger.json",
+      "url": "../tmp-swagger-gen/noria/coinmaster/query.swagger.json",
       "operationIds": {
         "rename": {
           "Params": "CoinmasterParams"
@@ -23,18 +23,18 @@
       }
     },
     {
-      "url": "../tmp-swagger-gen/cosmos/auth/v1beta1/query.swagger.json",
+      "url": "../tmp-swagger-gen/cosmwasm/wasm/v1/query.swagger.json",
       "operationIds": {
         "rename": {
-          "Params": "AuthParams"
+          "Params": "WasmParams"
         }
       }
     },
     {
-      "url": "../tmp-swagger-gen/cosmos/authz/v1beta1/query.swagger.json",
+      "url": "../tmp-swagger-gen/cosmos/auth/v1beta1/query.swagger.json",
       "operationIds": {
         "rename": {
-          "Params": "AuthzParams"
+          "Params": "AuthParams"
         }
       }
     },
@@ -71,14 +71,6 @@
       }
     },
     {
-      "url": "../tmp-swagger-gen/cosmos/feegrant/v1beta1/query.swagger.json",
-      "operationIds": {
-        "rename": {
-          "Params": "FeegrantParams"
-        }
-      }
-    },
-    {
       "url": "../tmp-swagger-gen/cosmos/gov/v1beta1/query.swagger.json",
       "operationIds": {
         "rename": {
@@ -87,10 +79,25 @@
       }
     },
     {
+      "url": "../tmp-swagger-gen/cosmos/gov/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "GovV1Params",
+          "Proposal": "GovV1Proposal",
+          "Proposals": "GovV1Proposal",
+          "Vote": "GovV1Vote",
+          "Votes": "GovV1Votes",
+          "Deposit": "GovV1Deposit",
+          "Deposits": "GovV1Deposit",
+          "TallyResult": "GovV1TallyResult"
+        }
+      }
+    },
+    {
       "url": "../tmp-swagger-gen/cosmos/mint/v1beta1/query.swagger.json",
       "operationIds": {
         "rename": {
-          "Params": "CosmosMintParams"
+          "Params": "MintParams"
         }
       }
     },
@@ -115,7 +122,6 @@
       "operationIds": {
         "rename": {
           "Params": "StakingParams",
-          "Pool": "StakingPool",
           "DelegatorValidators": "StakingDelegatorValidators"
         }
       }
@@ -131,6 +137,41 @@
       "operationIds": {
         "rename": {
           "Params": "UpgradeParams"
+        }
+      }
+    },
+    {
+      "url": "../tmp-swagger-gen/cosmos/authz/v1beta1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "AuthzParams"
+        }
+      }
+    },
+    {
+      "url": "../tmp-swagger-gen/cosmos/feegrant/v1beta1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "FeegrantParams"
+        }
+      }
+    },
+    {
+      "url": "../tmp-swagger-gen/cosmos/nft/v1beta1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "NftParams",
+          "Balance": "NftBalance"
+        }
+      }
+    },
+    {
+      "url": "../tmp-swagger-gen/cosmos/group/v1/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "GroupParams",
+          "Proposal": "GroupProposal",
+          "TallyResult": "GroupTallyResult"
         }
       }
     }
