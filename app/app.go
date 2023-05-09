@@ -242,18 +242,19 @@ var (
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:       nil,
-		distrtypes.ModuleName:            nil,
-		minttypes.ModuleName:             {authtypes.Minter},
-		stakingtypes.BondedPoolName:      {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName:   {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:              {authtypes.Burner},
-		nft.ModuleName:                   nil,
-		ibctransfertypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
-		ibcfeetypes.ModuleName:           nil,
-		icatypes.ModuleName:              nil,
-		wasm.ModuleName:                  {authtypes.Burner},
-		coinmastermoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner, authtypes.Staking},
+		authtypes.FeeCollectorName:         nil,
+		distrtypes.ModuleName:              nil,
+		minttypes.ModuleName:               {authtypes.Minter},
+		stakingtypes.BondedPoolName:        {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:     {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                {authtypes.Burner},
+		nft.ModuleName:                     nil,
+		ibctransfertypes.ModuleName:        {authtypes.Minter, authtypes.Burner},
+		ibcfeetypes.ModuleName:             nil,
+		icatypes.ModuleName:                nil,
+		wasm.ModuleName:                    {authtypes.Burner},
+		tokenfactorymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner},
+		coinmastermoduletypes.ModuleName:   {authtypes.Minter, authtypes.Burner},
 	}
 )
 
