@@ -12,5 +12,6 @@ func AllCapabilities() []string {
 		"cosmwasm_1_2",
 		"noria",
 		"coinmaster",
+		"token_factory",
 	}
 }
