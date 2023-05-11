@@ -64,6 +64,7 @@ sed -i.bak "s/^minimum-gas-prices\ =\ .*/minimum-gas-prices\ =\ \"0.0025$GAS_PRI
 # Edit app.toml to enable LCD REST server on port 1317 and REST documentation at http://localhost:1317/swagger/
 sed -i.bak 's/^enable\ =\ false/enable\ =\ true/g' $CONFIG_HOME/app.toml
 sed -i.bak 's/^swagger\ =\ false/swagger\ =\ true/g' $CONFIG_HOME/app.toml
+sed -i.bak '/Rosetta API/{n; s/true/false/}' $CONFIG_HOME/app.toml
 rm $CONFIG_HOME/app.toml.bak
 
 echo -e "\n\nYou can now start your chain with 'noriad start'\n"
