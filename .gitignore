@@ -10,3 +10,8 @@ docs/static/openapi.yml
 .test
 tools/
 
+# Ignore the package directory
+package/
+
+# Temp and swap files
+*.swp

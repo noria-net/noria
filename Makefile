@@ -125,3 +125,9 @@ test:
 	(which mockery || go install github.com/vektra/mockery/v2@latest)
 	go generate ./...
 	go test ./... -v
+
+package:
+	mkdir -p package
+	tar -czvf package/noria_linux_amd64.tar.gz -C build noriad
+	sha256sum package/noria_linux_amd64.tar.gz > package/sha256.txt
+
