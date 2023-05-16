@@ -2,7 +2,7 @@
 
 HEIGHT=$1
 KEY_NAME=$2
-UPGRADE_NAME="v0.1.2"
+UPGRADE_NAME="v1.2.0"
 BINARY_DIR=".noria"
 CHAIN_ID="oasis-3"
 DENOM="unoria"
