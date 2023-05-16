@@ -15,7 +15,7 @@ export DAEMON_HOME="$HOME/$BINARY_DIR"
 if [ -n "$3" ]; then
   NODE=$3
 else
-  NODE=$(grep -oP '(?<=node\s=\s")[^"]+' $DAEMON_HOME/config/client.toml)
+  NODE=$(grep -oP '(?<=node\s=\s")[^"]+' "$DAEMON_HOME/config/client.toml")
 fi
 
 BINARY_DOWNLOAD_URL="https://github.com/noria-net/noria/releases/download/v1.2.0/noria_linux_amd64.tar.gz?checksum=sha256:28420d2d6b20136a97f256cc21d09dd02c61a46b3ef00914f1d0a5c54db6e15c"
@@ -38,14 +38,14 @@ $DAEMON_NAME tx gov submit-proposal software-upgrade $UPGRADE_NAME \
   --from $KEY_NAME \
   --chain-id $CHAIN_ID \
   --home $DAEMON_HOME \
-  --node $NODE \
+  --node "$NODE" \
   --yes \
   --gas-prices $GAS_PRICE$GAS_PRICE_DENOM \
   --gas auto \
   --gas-adjustment 1.5 \
   --broadcast-mode block
 
-PROPOSAL_ID=$($DAEMON_NAME q gov proposals limit 1 --reverse --output json --home $DAEMON_HOME --node $NODE | jq '.proposals[0].proposal_id | tonumber')
+PROPOSAL_ID=$($DAEMON_NAME q gov proposals limit 1 --reverse --output json --home $DAEMON_HOME --node "$NODE" | jq '.proposals[0].proposal_id | tonumber')
 
 # vote on the proposal
 $DAEMON_NAME tx gov vote $PROPOSAL_ID yes --from $KEY_NAME --chain-id $CHAIN_ID --home $DAEMON_HOME --node $NODE --yes --gas-prices $GAS_PRICE$GAS_PRICE_DENOM --gas auto --gas-adjustment 1.5 --broadcast-mode block
