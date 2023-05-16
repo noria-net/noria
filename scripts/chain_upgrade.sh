@@ -2,7 +2,7 @@
 
 HEIGHT=$1
 KEY_NAME=$2
-UPGRADE_NAME="v0.1.4"
+UPGRADE_NAME="v0.1.2"
 BINARY_DIR=".noria"
 CHAIN_ID="oasis-3"
 DENOM="unoria"
@@ -12,7 +12,7 @@ NODE="TBA"
 export DAEMON_NAME="noriad"
 export DAEMON_HOME="$HOME/$BINARY_DIR"
 
-BINARY_DOWNLOAD_URL="https://github.com/noria-net/noria/releases/download/v0.x.x/noria_linux_amd64.tar.gz?checksum=sha256:xxxx"
+BINARY_DOWNLOAD_URL="https://github.com/noria-net/noria/releases/download/v1.2.0/noria_linux_amd64.tar.gz?checksum=sha256:28420d2d6b20136a97f256cc21d09dd02c61a46b3ef00914f1d0a5c54db6e15c"
 
 # Block height and sender key name must be set
 if [ -z "$1" ] && [ -z "$2" ]; then
