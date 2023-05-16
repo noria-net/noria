@@ -29,7 +29,7 @@ if [ -z "$1" ] || [ -z "$2" ] || [ -z "$NODE" ]; then
 fi
 
 # submit upgrade proposal
-echo $DAEMON_NAME tx gov submit-proposal software-upgrade $UPGRADE_NAME \
+$DAEMON_NAME tx gov submit-proposal software-upgrade $UPGRADE_NAME \
   --title "Upgrade to $UPGRADE_NAME" \
   --description "Upgrade to $UPGRADE_NAME" \
   --upgrade-info="{\"binaries\":{\"linux/amd64\":\"$BINARY_DOWNLOAD_URL\"}}" \
@@ -44,8 +44,6 @@ echo $DAEMON_NAME tx gov submit-proposal software-upgrade $UPGRADE_NAME \
   --gas auto \
   --gas-adjustment 1.5 \
   --broadcast-mode block
-
-exit
 
 PROPOSAL_ID=$($DAEMON_NAME q gov proposals limit 1 --reverse --output json --home $DAEMON_HOME --node $NODE | jq '.proposals[0].proposal_id | tonumber')
 
