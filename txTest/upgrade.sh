@@ -27,9 +27,7 @@ $DAEMON_NAME tx gov submit-legacy-proposal software-upgrade $UPGRADE_NAME \
   --home $DAEMON_HOME \
   --node tcp://localhost:26657 \
   --yes \
-  --gas-prices $GAS_PRICE$GAS_PRICE_DENOM \
-  --gas auto \
-  --gas-adjustment 1.5 \
+  --fees 1000000ucrd \
   --no-validate
 
 sleep 2
@@ -44,7 +42,5 @@ $DAEMON_NAME tx gov vote $PROPOSAL_ID yes \
   --chain-id $CHAIN_ID \
   --home $DAEMON_HOME \
   --yes \
-  --gas-prices $GAS_PRICE$GAS_PRICE_DENOM \
-  --gas auto \
-  --node tcp://localhost:26657 \
-  --gas-adjustment 1.5
+  --fees 1000000ucrd \
+  --node tcp://localhost:26657
