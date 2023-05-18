@@ -427,13 +427,6 @@ func NewWasmApp(
 		Bech32Prefix,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	// app.BankKeeper = bankkeeper.NewBaseKeeper(
-	// 	appCodec,
-	// 	keys[banktypes.StoreKey],
-	// 	app.AccountKeeper,
-	// 	BlockedAddresses(),
-	// 	authtypes.NewModuleAddress(govtypes.ModuleName).String(),
-	// )
 	app.BankKeeper = custombankkeeper.NewBaseKeeper(
 		appCodec,
 		keys[banktypes.StoreKey],
@@ -745,7 +738,6 @@ func NewWasmApp(
 		),
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
 		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
-		// bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
 		custombankmodule.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper, false),
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
