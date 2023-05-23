@@ -20,7 +20,7 @@ fi
 exe() { echo "EXE\$ $@" ; "$@" ; }
 
 # submit parameter change proposal
-exe $DAEMON_NAME tx gov submit-legacy-proposal create-alliance $NEW_DENOM 1 0 1 0 1 1s \
+exe $DAEMON_NAME tx gov submit-legacy-proposal create-alliance $NEW_DENOM 1 0 1 1 0 1 1s \
   --deposit 10000000unoria \
   --from "$KEY_NAME" \
   --chain-id "$CHAIN_ID" \

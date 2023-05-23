@@ -786,8 +786,9 @@ func NewWasmApp(
 		alliancemoduletypes.ModuleName,
 	)
 
-	app.ModuleManager.SetOrderEndBlockers(
-		crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName,
+	app.ModuleManager.OrderEndBlockers = []string{
+		crisistypes.ModuleName, govtypes.ModuleName,
+		// stakingtypes.ModuleName,
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
 		slashingtypes.ModuleName, minttypes.ModuleName,
 		genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
@@ -802,7 +803,7 @@ func NewWasmApp(
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
 		alliancemoduletypes.ModuleName,
-	)
+	}
 
 	// NOTE: The genutils module must occur after staking so that pools are
 	// properly initialized with tokens from genesis accounts.
