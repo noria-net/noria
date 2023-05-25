@@ -12,7 +12,6 @@ FLAG1="--home $HOME1"
 HOME2="/tmp/noria2"
 CONFIG2="/tmp/noria2/config"
 RPC2="27657"
-API2="2327"
 GRPC2="10090"
 GRPCWEB2="10091"
 ADDR2="27658"
@@ -22,7 +21,6 @@ FLAG2="--home $HOME2"
 
 CHAIN_ID="oasis-3"
 DENOM="unoria"
-GAS_PRICE="0.0025"
 GAS_PRICE_DENOM="ucrd"
 
 echo -e "\nRemoving previous config folders ($HOME1, $HOME2)"
@@ -96,6 +94,6 @@ $BIN $FLAG2 --home $HOME2 start --address $ADDR2 \
   --grpc-web.address "localhost:$GRPCWEB2" \
   --rpc.laddr "tcp://localhost:$RPC2" \
   --p2p.laddr "tcp://localhost:$P2P2" \
-  --p2p.persistent_peers $PEER1 \
+  --p2p.persistent_peers "$PEER1" \
   --rpc.pprof_laddr "localhost:$PPROF2" \
   --pruning=nothing
