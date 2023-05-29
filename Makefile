@@ -105,6 +105,18 @@ build:
 	echo $(BUILD_FLAGS)
 	go build $(BUILD_FLAGS) -o ./build/noriad ./cmd/noriad
 
+package:
+	echo "Packaging noriad $(VERSION)"
+	mkdir -p release/$(VERSION)
+	tar -czvf release/$(VERSION)/noria_linux_amd64.tar.gz --transform='s,^build/,,' build/noriad
+	cd release/$(VERSION); \
+	sha256sum noria_linux_amd64.tar.gz > sha256.txt; \
+	cat sha256.txt
+
+validate_sha256:
+	cd release/$(VERSION); \
+	sha256sum -c sha256.txt
+
 clean:
 	rm -rf \
 		$(BUILDDIR)/ \
