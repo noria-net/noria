@@ -126,7 +126,7 @@ clean:
 rebuild: clean build
 
 docker-build:
-	$(DOCKER) build -f ./docker/Dockerfile.build -t noria\:$(VERSION) .; \
+	$(DOCKER) build -f ./docker/Dockerfile.build -t noria\:$(VERSION) . --network host; \
 	$(DOCKER) run --rm -v $(CURDIR)\:/code noria\:$(VERSION) make build;
 
 docker-test:

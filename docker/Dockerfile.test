@@ -1,4 +1,4 @@
-FROM golang:1.19.3-buster
+FROM golang:1.20.4-buster
 SHELL ["/bin/bash", "-c"]
 COPY ./build/noriad /usr/bin/noriad
 
