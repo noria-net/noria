@@ -27,7 +27,7 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 	if upgradeInfo.Name == UpgradeName && !app.UpgradeKeeper.IsSkipHeight(upgradeInfo.Height) {
 		storeUpgrades := store.StoreUpgrades{
 			Added: []string{
-				ibchookstypes.ModuleName,
+				ibchookstypes.StoreKey,
 			},
 		}
 
