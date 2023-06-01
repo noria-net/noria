@@ -139,6 +139,10 @@ import (
 	tokenfactorymodulekeeper "github.com/noria-net/token-factory/x/tokenfactory/keeper"
 	tokenfactorymoduletypes "github.com/noria-net/token-factory/x/tokenfactory/types"
 
+	ibchooks "github.com/noria-net/ibc-hooks/x/ibc-hooks"
+	ibchookskeeper "github.com/noria-net/ibc-hooks/x/ibc-hooks/keeper"
+	ibchookstypes "github.com/noria-net/ibc-hooks/x/ibc-hooks/types"
+
 	// unnamed import of statik for swagger UI support
 	_ "github.com/noria-net/noria/statik"
 )
@@ -238,6 +242,7 @@ var (
 		ibcfee.AppModuleBasic{},
 		coinmastermodule.AppModuleBasic{},
 		tokenfactorymodule.AppModuleBasic{},
+		ibchooks.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -304,6 +309,12 @@ type WasmApp struct {
 	CoinmasterKeeper    coinmastermodulekeeper.Keeper
 	TokenFactoryKeeper  tokenfactorymodulekeeper.Keeper
 
+	// IBC hooks
+	IBCHooksKeeper   *ibchookskeeper.Keeper
+	TransferStack    *ibchooks.IBCMiddleware
+	Ics20WasmHooks   *ibchooks.WasmHooks
+	HooksICS4Wrapper ibchooks.ICS4Middleware
+
 	ScopedIBCKeeper           capabilitykeeper.ScopedKeeper
 	ScopedICAHostKeeper       capabilitykeeper.ScopedKeeper
 	ScopedICAControllerKeeper capabilitykeeper.ScopedKeeper
@@ -356,6 +367,7 @@ func NewWasmApp(
 		icacontrollertypes.StoreKey,
 		coinmastermoduletypes.StoreKey,
 		tokenfactorymoduletypes.StoreKey,
+		ibchookstypes.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -585,6 +597,24 @@ func NewWasmApp(
 		scopedTransferKeeper,
 	)
 
+	transferIBCModule := transfer.NewIBCModule(app.TransferKeeper)
+
+	// Configure the hooks keeper
+	hooksKeeper := ibchookskeeper.NewKeeper(
+		keys[ibchookstypes.StoreKey],
+	)
+	app.IBCHooksKeeper = &hooksKeeper
+	wasmHooks := ibchooks.NewWasmHooks(&hooksKeeper, nil, Bech32Prefix) // The contract keeper needs to be set later
+	app.Ics20WasmHooks = &wasmHooks
+	app.HooksICS4Wrapper = ibchooks.NewICS4Middleware(
+		app.IBCKeeper.ChannelKeeper,
+		app.Ics20WasmHooks,
+	)
+
+	// Hooks Middleware
+	hooksTransferStack := ibchooks.NewIBCMiddleware(&transferIBCModule, &app.HooksICS4Wrapper)
+	app.TransferStack = &hooksTransferStack
+
 	app.ICAHostKeeper = icahostkeeper.NewKeeper(
 		appCodec,
 		keys[icahosttypes.StoreKey],
@@ -651,17 +681,14 @@ func NewWasmApp(
 		wasmOpts...,
 	)
 
+	app.Ics20WasmHooks.ContractKeeper = &app.WasmKeeper
+
 	// The gov proposal types can be individually enabled
 	if len(enabledProposals) != 0 {
 		govRouter.AddRoute(wasm.RouterKey, wasm.NewWasmProposalHandler(app.WasmKeeper, enabledProposals))
 	}
 	// Set legacy router for backwards compatibility with gov v1beta1
 	app.GovKeeper.SetLegacyRouter(govRouter)
-
-	// Create Transfer Stack
-	var transferStack porttypes.IBCModule
-	transferStack = transfer.NewIBCModule(app.TransferKeeper)
-	transferStack = ibcfee.NewIBCMiddleware(transferStack, app.IBCFeeKeeper)
 
 	// Create Interchain Accounts Stack
 	// SendPacket, since it is originating from the application to core IBC:
@@ -686,10 +713,10 @@ func NewWasmApp(
 
 	// Create static IBC router, add app routes, then set and seal it
 	ibcRouter := porttypes.NewRouter().
-		AddRoute(ibctransfertypes.ModuleName, transferStack).
-		AddRoute(wasm.ModuleName, wasmStack).
 		AddRoute(icacontrollertypes.SubModuleName, icaControllerStack).
-		AddRoute(icahosttypes.SubModuleName, icaHostStack)
+		AddRoute(icahosttypes.SubModuleName, icaHostStack).
+		AddRoute(ibctransfertypes.ModuleName, hooksTransferStack).
+		AddRoute(wasm.ModuleName, wasmStack)
 	app.IBCKeeper.SetRouter(ibcRouter)
 
 	/****  Module Options ****/
@@ -731,6 +758,7 @@ func NewWasmApp(
 		transfer.NewAppModule(app.TransferKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
+		ibchooks.NewAppModule(app.AccountKeeper),
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
 	)
 
@@ -750,6 +778,7 @@ func NewWasmApp(
 		ibcexported.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
+		ibchookstypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
@@ -767,6 +796,7 @@ func NewWasmApp(
 		ibcexported.ModuleName,
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
+		ibchookstypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
@@ -792,6 +822,7 @@ func NewWasmApp(
 		icatypes.ModuleName,
 		ibcfeetypes.ModuleName,
 		// wasm after ibc transfer
+		ibchookstypes.ModuleName,
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
