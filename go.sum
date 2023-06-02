@@ -765,6 +765,8 @@ github.com/nats-io/nkeys v0.1.0/go.mod h1:xpnFELMwJABBLVhffcfd1MZx6VsNRFpEugbxzi
 github.com/nats-io/nkeys v0.1.3/go.mod h1:xpnFELMwJABBLVhffcfd1MZx6VsNRFpEugbxziKVo7w=
 github.com/nats-io/nuid v1.0.1/go.mod h1:19wcPz3Ph3q0Jbyiqsd0kePYG7A95tJPxeL+1OSON2c=
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
+github.com/noria-net/ibc-hooks v1.1.0 h1:p2GPa9Bmofq+Tk8JfZD3wO3mrOe0/35QHk38w0dK+ZQ=
+github.com/noria-net/ibc-hooks v1.1.0/go.mod h1:p18dHO8elEH35eX0KEGmGKQCrLhsU5Jb0rC1Vsi0E0s=
 github.com/noria-net/token-factory v1.0.1 h1:lzwSI2Xb3lZvvzzrc3AxSV2X91YlW3XhWr8/6rnDPTU=
 github.com/noria-net/token-factory v1.0.1/go.mod h1:Y+DfoXCuceHNR+Qj1ipuzRNdpced0DINrSJEbMfn6n4=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=

@@ -3,7 +3,7 @@
   "info": {
     "title": "NORIA REST API",
     "description": "A REST interface for state queries",
-    "version": "1.2.0"
+    "version": "1.3.0"
   },
   "apis": [
     {
