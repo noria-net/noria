@@ -121,6 +121,11 @@ docker-test:
 	$(DOCKER) build -f ./docker/Dockerfile.test -t noria_test\:$(VERSION) .; \
 	$(DOCKER) run noria_test\:$(VERSION);
 
+script-lint:
+	@command -v shellcheck >/dev/null 2>&1 || { echo >&2 "shellcheck not found. Installing..."; sudo apt-get install shellcheck; }
+	shellcheck scripts/estimate_block_height.sh
+	shellcheck scripts/test_state_sync.sh
+
 test:
 	(which mockery || go install github.com/vektra/mockery/v2@latest)
 	go generate ./...
