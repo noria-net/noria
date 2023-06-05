@@ -5,6 +5,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	ibchookstypes "github.com/noria-net/ibc-hooks/x/ibc-hooks/types"
 	alliancemoduletypes "github.com/terra-money/alliance/x/alliance/types"
 )
 
@@ -28,6 +29,7 @@ func (app WasmApp) RegisterUpgradeHandlers() {
 		storeUpgrades := store.StoreUpgrades{
 			Added: []string{
 				alliancemoduletypes.ModuleName,
+				ibchookstypes.StoreKey,
 			},
 		}
 
