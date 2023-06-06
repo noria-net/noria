@@ -5,8 +5,8 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	alliancemoduletypes "github.com/noria-net/alliance/x/alliance/types"
 	ibchookstypes "github.com/noria-net/ibc-hooks/x/ibc-hooks/types"
-	alliancemoduletypes "github.com/terra-money/alliance/x/alliance/types"
 )
 
 const UpgradeName = "v1.3.0"

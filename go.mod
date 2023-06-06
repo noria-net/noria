@@ -175,7 +175,7 @@ require github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
 require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/linxGnu/grocksdb v1.7.16 // indirect
-	github.com/terra-money/alliance v0.2.0-rc.1.0.20230511030415-849c7b0a837e
+	github.com/noria-net/alliance v0.2.0-rc.1.0.20230511030415-849c7b0a837e
 )
 
 replace (
@@ -190,5 +190,5 @@ replace (
 	// pin version! 126854af5e6d has issues with the store so that queries fail
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
 
-	github.com/terra-money/alliance => ../alliance
+	github.com/noria-net/alliance => ../alliance
 )

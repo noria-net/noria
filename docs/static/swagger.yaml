@@ -64,6 +64,8 @@ paths:
                       type: boolean
                       title: >-
                         flag to check if an asset has completed the initialization process after the reward delay
+                    consensus_weight:
+                      type: string
                   title: 'key: denom value: AllianceAsset'
               pagination:
                 type: object
@@ -1037,6 +1039,8 @@ paths:
                     type: boolean
                     title: >-
                       flag to check if an asset has completed the initialization process after the reward delay
+                  consensus_weight:
+                    type: string
                 title: 'key: denom value: AllianceAsset'
         default:
           description: An unexpected error response.
@@ -1659,6 +1663,8 @@ paths:
                     type: boolean
                     title: >-
                       flag to check if an asset has completed the initialization process after the reward delay
+                  consensus_weight:
+                    type: string
                 title: 'key: denom value: AllianceAsset'
         default:
           description: An unexpected error response.
@@ -53102,6 +53108,8 @@ definitions:
         type: boolean
         title: >-
           flag to check if an asset has completed the initialization process after the reward delay
+      consensus_weight:
+        type: string
     title: 'key: denom value: AllianceAsset'
   alliance.Delegation:
     type: object
@@ -53308,6 +53316,8 @@ definitions:
             type: boolean
             title: >-
               flag to check if an asset has completed the initialization process after the reward delay
+          consensus_weight:
+            type: string
         title: 'key: denom value: AllianceAsset'
   alliance.QueryAllianceValidatorResponse:
     type: object
@@ -53572,6 +53582,8 @@ definitions:
               type: boolean
               title: >-
                 flag to check if an asset has completed the initialization process after the reward delay
+            consensus_weight:
+              type: string
           title: 'key: denom value: AllianceAsset'
       pagination:
         type: object

@@ -121,10 +121,10 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
 	"github.com/gorilla/mux"
+	custombankmodule "github.com/noria-net/alliance/custom/bank"
+	custombankkeeper "github.com/noria-net/alliance/custom/bank/keeper"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
-	custombankmodule "github.com/terra-money/alliance/custom/bank"
-	custombankkeeper "github.com/terra-money/alliance/custom/bank/keeper"
 
 	govclient "github.com/cosmos/cosmos-sdk/x/gov/client"
 
@@ -141,10 +141,10 @@ import (
 	tokenfactorymodulekeeper "github.com/noria-net/token-factory/x/tokenfactory/keeper"
 	tokenfactorymoduletypes "github.com/noria-net/token-factory/x/tokenfactory/types"
 
-	alliancemodule "github.com/terra-money/alliance/x/alliance"
-	alliancemoduleclient "github.com/terra-money/alliance/x/alliance/client"
-	alliancemodulekeeper "github.com/terra-money/alliance/x/alliance/keeper"
-	alliancemoduletypes "github.com/terra-money/alliance/x/alliance/types"
+	alliancemodule "github.com/noria-net/alliance/x/alliance"
+	alliancemoduleclient "github.com/noria-net/alliance/x/alliance/client"
+	alliancemodulekeeper "github.com/noria-net/alliance/x/alliance/keeper"
+	alliancemoduletypes "github.com/noria-net/alliance/x/alliance/types"
 
 	ibchooks "github.com/noria-net/ibc-hooks/x/ibc-hooks"
 	ibchookskeeper "github.com/noria-net/ibc-hooks/x/ibc-hooks/keeper"
