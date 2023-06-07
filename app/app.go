@@ -816,6 +816,10 @@ func NewWasmApp(
 		alliancemoduletypes.ModuleName,
 	)
 
+	/*
+		We intentionally bypass the SetOrderEndBlockers call in the module manager and manually set the order.
+		This way, we can completely remove the staking module from the endblocker order, and bake the logic into the alliance endblocker.
+	*/
 	app.ModuleManager.OrderEndBlockers = []string{
 		crisistypes.ModuleName, govtypes.ModuleName,
 		// stakingtypes.ModuleName, // removed and logic baked into the alliance endblocker
