@@ -818,7 +818,7 @@ func NewWasmApp(
 
 	app.ModuleManager.OrderEndBlockers = []string{
 		crisistypes.ModuleName, govtypes.ModuleName,
-		// stakingtypes.ModuleName,
+		// stakingtypes.ModuleName, // removed and logic baked into the alliance endblocker
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
 		slashingtypes.ModuleName, minttypes.ModuleName,
 		genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,

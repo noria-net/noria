@@ -172,8 +172,12 @@ require (
 
 require (
 	github.com/linxGnu/grocksdb v1.7.16 // indirect
-	github.com/noria-net/alliance v1.0.0
+	github.com/noria-net/alliance v1.0.1
 )
+
+require github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
+
+require github.com/ghodss/yaml v1.0.0 // indirect
 
 replace (
 	github.com/99designs/keyring => github.com/cosmos/keyring v1.2.0
