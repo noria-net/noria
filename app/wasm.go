@@ -13,5 +13,6 @@ func AllCapabilities() []string {
 		"noria",
 		"coinmaster",
 		"token_factory",
+		"alliance",
 	}
 }

@@ -142,6 +142,7 @@ import (
 	tokenfactorymoduletypes "github.com/noria-net/token-factory/x/tokenfactory/types"
 
 	alliancemodule "github.com/noria-net/alliance/x/alliance"
+	alliancebindings "github.com/noria-net/alliance/x/alliance/bindings"
 	alliancemoduleclient "github.com/noria-net/alliance/x/alliance/client"
 	alliancemodulekeeper "github.com/noria-net/alliance/x/alliance/keeper"
 	alliancemoduletypes "github.com/noria-net/alliance/x/alliance/types"
@@ -688,6 +689,7 @@ func NewWasmApp(
 
 	wasmOpts = append(wasmOpts, coinmasterbindings.RegisterCustomPlugins(&app.CoinmasterKeeper)...)
 	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(&app.BankKeeper.BaseKeeper, &app.TokenFactoryKeeper)...)
+	wasmOpts = append(wasmOpts, alliancebindings.RegisterCustomPlugins(&app.AllianceKeeper)...)
 
 	app.WasmKeeper = wasm.NewKeeper(
 		appCodec,
