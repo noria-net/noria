@@ -66,6 +66,8 @@ sed -i.bak "s/^minimum-gas-prices\ =\ .*/minimum-gas-prices\ =\ \"0.0025$GAS_PRI
 sed -i.bak 's/^enable\ =\ false/enable\ =\ true/g' $CONFIG_HOME/app.toml
 sed -i.bak 's/^swagger\ =\ false/swagger\ =\ true/g' $CONFIG_HOME/app.toml
 sed -i.bak '/Rosetta API/{n; s/true/false/}' $CONFIG_HOME/app.toml
+sed -i.bak "s/^enabled-unsafe-cors\ =\ .*/enabled-unsafe-cors\ =\ true/g" $CONFIG_HOME/app.toml
+sed -i.bak "s/localhost/0.0.0.0/g" $CONFIG_HOME/app.toml
 rm $CONFIG_HOME/app.toml.bak
 
 echo -e "\n\nYou can now start your chain with 'noriad start'\n"
