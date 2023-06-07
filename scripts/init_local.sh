@@ -46,8 +46,9 @@ sed -i.bak "s/stake/$DENOM/g" $CONFIG_HOME/genesis.json
 sed -i.bak 's/"inflation": "[^"]*"/"inflation": "0\.0"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"inflation_rate_change": "[^"]*"/"inflation_rate_change": "0\.0"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"inflation_min": "[^"]*"/"inflation_min": "0\.0"/g' $CONFIG_HOME/genesis.json
-sed -i.bak 's/"voting_period": "[^"]*"/"voting_period": "10s"/g' $CONFIG_HOME/genesis.json
+sed -i.bak 's/"voting_period": "[^"]*"/"voting_period": "5s"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"quorum": "[^"]*"/"quorum": "0.000001"/g' $CONFIG_HOME/genesis.json
+sed -i.bak 's/"reward_delay_time": "[^"]*"/"reward_delay_time": "1s"/g' $CONFIG_HOME/genesis.json
 
 tmp=$(mktemp)
 jq '.app_state.tokenfactory.params.denom_creation_fee[0].denom = "ucrd"' $CONFIG_HOME/genesis.json > "$tmp" && mv "$tmp" $CONFIG_HOME/genesis.json
@@ -65,6 +66,8 @@ sed -i.bak "s/^minimum-gas-prices\ =\ .*/minimum-gas-prices\ =\ \"0.0025$GAS_PRI
 sed -i.bak 's/^enable\ =\ false/enable\ =\ true/g' $CONFIG_HOME/app.toml
 sed -i.bak 's/^swagger\ =\ false/swagger\ =\ true/g' $CONFIG_HOME/app.toml
 sed -i.bak '/Rosetta API/{n; s/true/false/}' $CONFIG_HOME/app.toml
+sed -i.bak "s/^enabled-unsafe-cors\ =\ .*/enabled-unsafe-cors\ =\ true/g" $CONFIG_HOME/app.toml
+sed -i.bak "s/localhost/0.0.0.0/g" $CONFIG_HOME/app.toml
 rm $CONFIG_HOME/app.toml.bak
 
 echo -e "\n\nYou can now start your chain with 'noriad start'\n"

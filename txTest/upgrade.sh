@@ -9,49 +9,38 @@ CHAIN_ID="oasis-3"
 DENOM="unoria"
 GAS_PRICE="0.0025"
 GAS_PRICE_DENOM="ucrd"
-BINARY_DOWNLOAD_URL="xxx"
 FROM_KEY_NAME="me"
-export DAEMON_NAME="noriad"
-export DAEMON_HOME="$HOME/$BINARY_DIR"
-
-if ! command -v cosmovisor &>/dev/null; then
-  echo "\n\ncosmovisor could not be found"
-  exit
-fi
+DAEMON_NAME="noriad"
+DAEMON_HOME="$HOME/$BINARY_DIR"
 
 # submit upgrade proposal
 echo Submitting upgrade proposal
-$DAEMON_NAME tx gov submit-proposal software-upgrade $UPGRADE_NAME \
-    --title "Upgrade to $UPGRADE_NAME" \
-    --description "Upgrade to $UPGRADE_NAME" \
-    --upgrade-info='{"binaries":{"linux/amd64":$BINARY_DOWNLOAD_URL}}' \
-    --deposit 10000000$DENOM \
-    --upgrade-height $HEIGHT \
-    --from $FROM_KEY_NAME \
-    --chain-id $CHAIN_ID \
-    --keyring-backend test \
-    --home $DAEMON_HOME \
-    --node tcp://localhost:26657 \
-    --yes \
-    --gas-prices $GAS_PRICE$GAS_PRICE_DENOM \
-    --gas auto \
-    --gas-adjustment 1.5 \
-    --broadcast-mode block
+$DAEMON_NAME tx gov submit-legacy-proposal software-upgrade $UPGRADE_NAME \
+  --title "Upgrade to $UPGRADE_NAME" \
+  --description "Upgrade to $UPGRADE_NAME" \
+  --upgrade-info='{}' \
+  --deposit 10000000$DENOM \
+  --upgrade-height $HEIGHT \
+  --from $FROM_KEY_NAME \
+  --chain-id $CHAIN_ID \
+  --keyring-backend test \
+  --home $DAEMON_HOME \
+  --node tcp://localhost:26657 \
+  --yes \
+  --fees 1000000ucrd \
+  --no-validate
+
+sleep 2
 
 # vote on the proposal
-echo Voting YES on the upgrade proposal
-$DAEMON_NAME tx gov vote 1 yes \
-    --from $FROM_KEY_NAME \
-    --chain-id $CHAIN_ID \
-    --keyring-backend test \
-    --home $DAEMON_HOME \
-    --node tcp://localhost:26657 \
-    --yes \
-    --gas-prices $GAS_PRICE$GAS_PRICE_DENOM \
-    --gas auto \
-    --gas-adjustment 1.5 \
-    --broadcast-mode block
+echo "\n\nVoting YES on the upgrade proposal\n\n"
 
-# make install
-# mkdir -p $DAEMON_HOME/cosmovisor/upgrades/$UPGRADE_NAME/bin/
-# cp `which $DAEMON_NAME` $DAEMON_HOME/cosmovisor/upgrades/$UPGRADE_NAME/bin/
+PROPOSAL_ID=$($DAEMON_NAME q gov proposals limit 1 --reverse --output json | jq '.proposals[0].id | tonumber')
+# vote on the proposal
+$DAEMON_NAME tx gov vote $PROPOSAL_ID yes \
+  --from $FROM_KEY_NAME \
+  --chain-id $CHAIN_ID \
+  --home $DAEMON_HOME \
+  --yes \
+  --fees 1000000ucrd \
+  --node tcp://localhost:26657

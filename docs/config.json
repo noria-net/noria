@@ -7,6 +7,14 @@
   },
   "apis": [
     {
+      "url": "../tmp-swagger-gen/alliance/query.swagger.json",
+      "operationIds": {
+        "rename": {
+          "Params": "AllianceParams"
+        }
+      }
+    },
+    {
       "url": "../tmp-swagger-gen/noria/coinmaster/query.swagger.json",
       "operationIds": {
         "rename": {

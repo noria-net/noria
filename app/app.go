@@ -48,7 +48,7 @@ import (
 	authzkeeper "github.com/cosmos/cosmos-sdk/x/authz/keeper"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
 	"github.com/cosmos/cosmos-sdk/x/bank"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/capability"
 	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
@@ -121,6 +121,8 @@ import (
 	ibckeeper "github.com/cosmos/ibc-go/v7/modules/core/keeper"
 	ibctm "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
 	"github.com/gorilla/mux"
+	custombankmodule "github.com/noria-net/alliance/custom/bank"
+	custombankkeeper "github.com/noria-net/alliance/custom/bank/keeper"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
 
@@ -138,6 +140,12 @@ import (
 	tokenfactorybindings "github.com/noria-net/token-factory/x/tokenfactory/bindings"
 	tokenfactorymodulekeeper "github.com/noria-net/token-factory/x/tokenfactory/keeper"
 	tokenfactorymoduletypes "github.com/noria-net/token-factory/x/tokenfactory/types"
+
+	alliancemodule "github.com/noria-net/alliance/x/alliance"
+	alliancebindings "github.com/noria-net/alliance/x/alliance/bindings"
+	alliancemoduleclient "github.com/noria-net/alliance/x/alliance/client"
+	alliancemodulekeeper "github.com/noria-net/alliance/x/alliance/keeper"
+	alliancemoduletypes "github.com/noria-net/alliance/x/alliance/types"
 
 	ibchooks "github.com/noria-net/ibc-hooks/x/ibc-hooks"
 	ibchookskeeper "github.com/noria-net/ibc-hooks/x/ibc-hooks/keeper"
@@ -220,6 +228,9 @@ var (
 				upgradeclient.LegacyCancelProposalHandler,
 				ibcclientclient.UpdateClientProposalHandler,
 				ibcclientclient.UpgradeProposalHandler,
+				alliancemoduleclient.CreateAllianceProposalHandler,
+				alliancemoduleclient.UpdateAllianceProposalHandler,
+				alliancemoduleclient.DeleteAllianceProposalHandler,
 			},
 		),
 		params.AppModuleBasic{},
@@ -242,24 +253,27 @@ var (
 		ibcfee.AppModuleBasic{},
 		coinmastermodule.AppModuleBasic{},
 		tokenfactorymodule.AppModuleBasic{},
+		alliancemodule.AppModuleBasic{},
 		ibchooks.AppModuleBasic{},
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
-		authtypes.FeeCollectorName:         nil,
-		distrtypes.ModuleName:              nil,
-		minttypes.ModuleName:               {authtypes.Minter},
-		stakingtypes.BondedPoolName:        {authtypes.Burner, authtypes.Staking},
-		stakingtypes.NotBondedPoolName:     {authtypes.Burner, authtypes.Staking},
-		govtypes.ModuleName:                {authtypes.Burner},
-		nft.ModuleName:                     nil,
-		ibctransfertypes.ModuleName:        {authtypes.Minter, authtypes.Burner},
-		ibcfeetypes.ModuleName:             nil,
-		icatypes.ModuleName:                nil,
-		wasm.ModuleName:                    {authtypes.Burner},
-		tokenfactorymoduletypes.ModuleName: {authtypes.Minter, authtypes.Burner},
-		coinmastermoduletypes.ModuleName:   {authtypes.Minter, authtypes.Burner},
+		authtypes.FeeCollectorName:          nil,
+		distrtypes.ModuleName:               nil,
+		minttypes.ModuleName:                {authtypes.Minter},
+		stakingtypes.BondedPoolName:         {authtypes.Burner, authtypes.Staking},
+		stakingtypes.NotBondedPoolName:      {authtypes.Burner, authtypes.Staking},
+		govtypes.ModuleName:                 {authtypes.Burner},
+		nft.ModuleName:                      nil,
+		ibctransfertypes.ModuleName:         {authtypes.Minter, authtypes.Burner},
+		ibcfeetypes.ModuleName:              nil,
+		icatypes.ModuleName:                 nil,
+		wasm.ModuleName:                     {authtypes.Burner},
+		tokenfactorymoduletypes.ModuleName:  {authtypes.Minter, authtypes.Burner},
+		coinmastermoduletypes.ModuleName:    {authtypes.Minter, authtypes.Burner},
+		alliancemoduletypes.ModuleName:      {authtypes.Minter, authtypes.Burner},
+		alliancemoduletypes.RewardsPoolName: nil,
 	}
 )
 
@@ -283,7 +297,7 @@ type WasmApp struct {
 
 	// keepers
 	AccountKeeper         authkeeper.AccountKeeper
-	BankKeeper            bankkeeper.BaseKeeper
+	BankKeeper            custombankkeeper.Keeper
 	CapabilityKeeper      *capabilitykeeper.Keeper
 	StakingKeeper         *stakingkeeper.Keeper
 	SlashingKeeper        slashingkeeper.Keeper
@@ -308,6 +322,7 @@ type WasmApp struct {
 	WasmKeeper          wasm.Keeper
 	CoinmasterKeeper    coinmastermodulekeeper.Keeper
 	TokenFactoryKeeper  tokenfactorymodulekeeper.Keeper
+	AllianceKeeper      alliancemodulekeeper.Keeper
 
 	// IBC hooks
 	IBCHooksKeeper   *ibchookskeeper.Keeper
@@ -367,6 +382,7 @@ func NewWasmApp(
 		icacontrollertypes.StoreKey,
 		coinmastermoduletypes.StoreKey,
 		tokenfactorymoduletypes.StoreKey,
+		alliancemoduletypes.StoreKey,
 		ibchookstypes.StoreKey,
 	)
 
@@ -424,7 +440,7 @@ func NewWasmApp(
 		Bech32Prefix,
 		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
 	)
-	app.BankKeeper = bankkeeper.NewBaseKeeper(
+	app.BankKeeper = custombankkeeper.NewBaseKeeper(
 		appCodec,
 		keys[banktypes.StoreKey],
 		app.AccountKeeper,
@@ -478,10 +494,22 @@ func NewWasmApp(
 
 	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
 
+	app.AllianceKeeper = alliancemodulekeeper.NewKeeper(
+		appCodec,
+		keys[alliancemoduletypes.StoreKey],
+		app.GetSubspace(alliancemoduletypes.ModuleName),
+		app.AccountKeeper,
+		app.BankKeeper,
+		app.StakingKeeper,
+		app.DistrKeeper,
+	)
+
+	app.BankKeeper.RegisterKeepers(app.AllianceKeeper, app.StakingKeeper)
 	// register the staking hooks
 	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
 	app.StakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
+		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks(),
+			app.AllianceKeeper.StakingHooks()),
 	)
 
 	app.AuthzKeeper = authzkeeper.NewKeeper(keys[authzkeeper.StoreKey], appCodec, app.MsgServiceRouter(), app.AccountKeeper)
@@ -526,7 +554,8 @@ func NewWasmApp(
 	govRouter.AddRoute(govtypes.RouterKey, govv1beta1.ProposalHandler).
 		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)). // This should be removed. It is still in place to avoid failures of modules that have not yet been upgraded.
 		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
-		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
+		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper)).
+		AddRoute(alliancemoduletypes.RouterKey, alliancemodule.NewAllianceProposalHandler(app.AllianceKeeper))
 
 	govConfig := govtypes.DefaultConfig()
 	/*
@@ -659,7 +688,8 @@ func NewWasmApp(
 	availableCapabilities := strings.Join(AllCapabilities(), ",")
 
 	wasmOpts = append(wasmOpts, coinmasterbindings.RegisterCustomPlugins(&app.CoinmasterKeeper)...)
-	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(&app.BankKeeper, &app.TokenFactoryKeeper)...)
+	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(&app.BankKeeper.BaseKeeper, &app.TokenFactoryKeeper)...)
+	wasmOpts = append(wasmOpts, alliancebindings.RegisterCustomPlugins(&app.AllianceKeeper)...)
 
 	app.WasmKeeper = wasm.NewKeeper(
 		appCodec,
@@ -736,7 +766,7 @@ func NewWasmApp(
 		),
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts, app.GetSubspace(authtypes.ModuleName)),
 		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
-		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
+		custombankmodule.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper, app.GetSubspace(banktypes.ModuleName)),
 		capability.NewAppModule(appCodec, *app.CapabilityKeeper, false),
 		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		gov.NewAppModule(appCodec, &app.GovKeeper, app.AccountKeeper, app.BankKeeper, app.GetSubspace(govtypes.ModuleName)),
@@ -754,6 +784,7 @@ func NewWasmApp(
 		wasm.NewAppModule(appCodec, &app.WasmKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.MsgServiceRouter(), app.GetSubspace(wasmtypes.ModuleName)),
 		coinmasterModule,
 		tokenfactoryModule,
+		alliancemodule.NewAppModule(appCodec, app.AllianceKeeper, app.StakingKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
 		ibc.NewAppModule(app.IBCKeeper),
 		transfer.NewAppModule(app.TransferKeeper),
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
@@ -782,10 +813,16 @@ func NewWasmApp(
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
+		alliancemoduletypes.ModuleName,
 	)
 
-	app.ModuleManager.SetOrderEndBlockers(
-		crisistypes.ModuleName, govtypes.ModuleName, stakingtypes.ModuleName,
+	/*
+		We intentionally bypass the SetOrderEndBlockers call in the module manager and manually set the order.
+		This way, we can completely remove the staking module from the endblocker order, and bake the logic into the alliance endblocker.
+	*/
+	app.ModuleManager.OrderEndBlockers = []string{
+		crisistypes.ModuleName, govtypes.ModuleName,
+		// stakingtypes.ModuleName, // removed and logic baked into the alliance endblocker
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
 		slashingtypes.ModuleName, minttypes.ModuleName,
 		genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
@@ -800,7 +837,8 @@ func NewWasmApp(
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
-	)
+		alliancemoduletypes.ModuleName,
+	}
 
 	// NOTE: The genutils module must occur after staking so that pools are
 	// properly initialized with tokens from genesis accounts.
@@ -826,6 +864,7 @@ func NewWasmApp(
 		wasm.ModuleName,
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
+		alliancemoduletypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -1130,6 +1169,7 @@ func BlockedAddresses() map[string]bool {
 
 	// allow the following addresses to receive funds
 	delete(modAccAddrs, authtypes.NewModuleAddress(govtypes.ModuleName).String())
+	delete(modAccAddrs, authtypes.NewModuleAddress(alliancemoduletypes.ModuleName).String())
 
 	return modAccAddrs
 }
@@ -1153,6 +1193,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(coinmastermoduletypes.ModuleName)
 	paramsKeeper.Subspace(tokenfactorymoduletypes.ModuleName)
 	paramsKeeper.Subspace(wasm.ModuleName)
+	paramsKeeper.Subspace(alliancemoduletypes.ModuleName)
 
 	return paramsKeeper
 }
