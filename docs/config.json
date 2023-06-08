@@ -15,7 +15,7 @@
       }
     },
     {
-      "url": "../tmp-swagger-gen/noria/coinmaster/query.swagger.json",
+      "url": "../tmp-swagger-gen/norianet/noria/coinmaster/query.swagger.json",
       "operationIds": {
         "rename": {
           "Params": "CoinmasterParams"
