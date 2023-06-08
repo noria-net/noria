@@ -172,7 +172,7 @@ require (
 
 require (
 	github.com/linxGnu/grocksdb v1.7.16 // indirect
-	github.com/noria-net/alliance v1.0.1
+	github.com/noria-net/alliance v1.1.0
 )
 
 require github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2
