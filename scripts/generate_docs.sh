@@ -31,7 +31,7 @@ if [ -d "$temp_dir" ]; then
 fi
 
 # generate a full set of proto files with all dependencies
-buf export buf.build/noria-net/alliance:48e90d2a6b7c4cf682dbdcc62bc5ccc1 --output ./tmp-swagger-gen-proto
+buf export buf.build/noria-net/alliance:1ac39d8befc94dfcb5b5ba5ac4fb0958 --output ./tmp-swagger-gen-proto
 buf export buf.build/cosmos/ibc:234366cdb7d74fcb83846062dc6e85b4 --output ./tmp-swagger-gen-proto
 buf export buf.build/cosmwasm/wasmd:8fdeb62caead42bd8f287577b1534a6b --output ./tmp-swagger-gen-proto
 buf export buf.build/cosmos/cosmos-sdk:14f154b98b9b4cf381a0878e8a9d4694 --output ./tmp-swagger-gen-proto
