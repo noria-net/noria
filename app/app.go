@@ -151,6 +151,10 @@ import (
 	ibchookskeeper "github.com/noria-net/ibc-hooks/x/ibc-hooks/keeper"
 	ibchookstypes "github.com/noria-net/ibc-hooks/x/ibc-hooks/types"
 
+	adminmodule "github.com/noria-net/module-admin/x/admin"
+	adminmodulekeeper "github.com/noria-net/module-admin/x/admin/keeper"
+	adminmoduletypes "github.com/noria-net/module-admin/x/admin/types"
+
 	// unnamed import of statik for swagger UI support
 	_ "github.com/noria-net/noria/statik"
 )
@@ -255,6 +259,7 @@ var (
 		tokenfactorymodule.AppModuleBasic{},
 		alliancemodule.AppModuleBasic{},
 		ibchooks.AppModuleBasic{},
+		adminmodule.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -323,6 +328,7 @@ type WasmApp struct {
 	CoinmasterKeeper    coinmastermodulekeeper.Keeper
 	TokenFactoryKeeper  tokenfactorymodulekeeper.Keeper
 	AllianceKeeper      alliancemodulekeeper.Keeper
+	AdminKeeper         adminmodulekeeper.Keeper
 
 	// IBC hooks
 	IBCHooksKeeper   *ibchookskeeper.Keeper
@@ -582,6 +588,16 @@ func NewWasmApp(
 	)
 	coinmasterModule := coinmastermodule.NewAppModule(appCodec, app.CoinmasterKeeper, app.AccountKeeper, app.BankKeeper)
 
+	app.AdminKeeper = *adminmodulekeeper.NewKeeper(
+		appCodec,
+		keys[adminmoduletypes.StoreKey],
+		keys[adminmoduletypes.MemStoreKey],
+		app.GetSubspace(adminmoduletypes.ModuleName),
+
+		app.AllianceKeeper,
+	)
+	adminModule := adminmodule.NewAppModule(appCodec, app.AdminKeeper, app.AccountKeeper, app.BankKeeper)
+
 	app.GovKeeper = *govKeeper.SetHooks(
 		govtypes.NewMultiGovHooks(
 		// register the governance hooks
@@ -790,6 +806,7 @@ func NewWasmApp(
 		ibcfee.NewAppModule(app.IBCFeeKeeper),
 		ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
 		ibchooks.NewAppModule(app.AccountKeeper),
+		adminModule,
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
 	)
 
@@ -814,6 +831,7 @@ func NewWasmApp(
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
 		alliancemoduletypes.ModuleName,
+		adminmoduletypes.ModuleName,
 	)
 
 	/*
@@ -838,6 +856,7 @@ func NewWasmApp(
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
 		alliancemoduletypes.ModuleName,
+		adminmoduletypes.ModuleName,
 	}
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -865,6 +884,7 @@ func NewWasmApp(
 		coinmastermoduletypes.ModuleName,
 		tokenfactorymoduletypes.ModuleName,
 		alliancemoduletypes.ModuleName,
+		adminmoduletypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -1194,6 +1214,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(tokenfactorymoduletypes.ModuleName)
 	paramsKeeper.Subspace(wasm.ModuleName)
 	paramsKeeper.Subspace(alliancemoduletypes.ModuleName)
+	paramsKeeper.Subspace(adminmoduletypes.ModuleName)
 
 	return paramsKeeper
 }

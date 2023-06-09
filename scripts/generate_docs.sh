@@ -31,6 +31,7 @@ if [ -d "$temp_dir" ]; then
 fi
 
 # generate a full set of proto files with all dependencies
+buf export buf.build/noria-net/admin:26a76e1ae86a4e068b6da53683842869 --output ./tmp-swagger-gen-proto
 buf export buf.build/noria-net/alliance:1ac39d8befc94dfcb5b5ba5ac4fb0958 --output ./tmp-swagger-gen-proto
 buf export buf.build/cosmos/ibc:234366cdb7d74fcb83846062dc6e85b4 --output ./tmp-swagger-gen-proto
 buf export buf.build/cosmwasm/wasmd:8fdeb62caead42bd8f287577b1534a6b --output ./tmp-swagger-gen-proto
@@ -50,7 +51,7 @@ cp -r tmp-swagger-gen-proto /tmp
 
 
 cd /tmp/tmp-swagger-gen-proto
-proto_dirs=$(find alliance cosmos norianet osmosis cosmwasm ibc -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
+proto_dirs=$(find admin alliance cosmos norianet osmosis cosmwasm ibc -path -prune -o -name '*.proto' -print0 | xargs -0 -n1 dirname | sort | uniq)
 for dir in $proto_dirs; do
   # generate swagger files (filter query files)
   query_file=$(find "${dir}" -maxdepth 1 \( -name 'query.proto' -o -name 'service.proto' \))

@@ -28,6 +28,7 @@ noriad config chain-id $CHAIN_ID
 
 # Create a new wallet named "me"
 noriad keys add me
+ADDR=$(noriad keys show me -a)
 
 # Initialize a new genesis.json file
 noriad init me --overwrite --chain-id $CHAIN_ID
@@ -49,6 +50,7 @@ sed -i.bak 's/"inflation_min": "[^"]*"/"inflation_min": "0\.0"/g' $CONFIG_HOME/g
 sed -i.bak 's/"voting_period": "[^"]*"/"voting_period": "5s"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"quorum": "[^"]*"/"quorum": "0.000001"/g' $CONFIG_HOME/genesis.json
 sed -i.bak 's/"reward_delay_time": "[^"]*"/"reward_delay_time": "1s"/g' $CONFIG_HOME/genesis.json
+sed -i.bak 's/"admin": "[^"]*"/"admin": "'$ADDR'"/g' $CONFIG_HOME/genesis.json
 
 tmp=$(mktemp)
 jq '.app_state.tokenfactory.params.denom_creation_fee[0].denom = "ucrd"' $CONFIG_HOME/genesis.json > "$tmp" && mv "$tmp" $CONFIG_HOME/genesis.json
