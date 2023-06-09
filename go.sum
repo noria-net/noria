@@ -776,6 +776,8 @@ github.com/noria-net/alliance v1.1.0 h1:jODC0GQAgjZFzfdi5D3klmRvRVujFzVZtD7qIsJT
 github.com/noria-net/alliance v1.1.0/go.mod h1:rn9s0pIuvnEejF5Qpcqs+8SHlIzKsP+9kBeNboAHmSc=
 github.com/noria-net/ibc-hooks v1.1.0 h1:p2GPa9Bmofq+Tk8JfZD3wO3mrOe0/35QHk38w0dK+ZQ=
 github.com/noria-net/ibc-hooks v1.1.0/go.mod h1:p18dHO8elEH35eX0KEGmGKQCrLhsU5Jb0rC1Vsi0E0s=
+github.com/noria-net/module-admin v1.0.1 h1:nyduv6QmmqYK1cLiTgxffBPyg+RM+kdsVjjK9PsBcS4=
+github.com/noria-net/module-admin v1.0.1/go.mod h1:VfwR3StVeVaSD4u5Y1mAjU6iEsADD1jZomH58JYbH9M=
 github.com/noria-net/token-factory v1.0.1 h1:lzwSI2Xb3lZvvzzrc3AxSV2X91YlW3XhWr8/6rnDPTU=
 github.com/noria-net/token-factory v1.0.1/go.mod h1:Y+DfoXCuceHNR+Qj1ipuzRNdpced0DINrSJEbMfn6n4=
 github.com/nxadm/tail v1.4.4/go.mod h1:kenIhsEOeOJmVchQTgglprH7qJGnHDVpk1VPCcaMI8A=
