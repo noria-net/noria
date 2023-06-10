@@ -10,3 +10,5 @@ docs/static/openapi.yml
 .test
 tools/
 package/
+.multinode
+.network

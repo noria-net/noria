@@ -30,7 +30,7 @@ exe() {
 }
 
 # submit parameter change proposal
-# create-alliance denom reward-weight reward-weight-min reward-weight-max consensus-weight take-rate reward-change-rate reward-change-interval
+# create-alliance denom reward-weight reward-weight-min reward-weight-max consensus-weight consensus-cap take-rate reward-change-rate reward-change-interval
 exe $DAEMON_NAME tx gov submit-legacy-proposal create-alliance $NEW_DENOM 1 0 1 1 0.1 0 1 1s \
   --deposit 10000000unoria \
   --from "$KEY_NAME" \
@@ -51,4 +51,4 @@ sleep 5
 
 # delegate to the validator through alliance
 VAL=$($DAEMON_NAME q staking validators --output json | jq '.validators[0].operator_address' | sed 's/\"//g')
-exe noriad tx alliance delegate $VAL $AMOUNT$NEW_DENOM --from me --fees 1000ucrd
+exe noriad tx alliance delegate $VAL $AMOUNT$NEW_DENOM --from $KEY_NAME --fees 1000ucrd
