@@ -37,7 +37,7 @@
 
 set -eo pipefail
 
-./scripts/generate_proto.sh
+./dev/scripts/generate_proto.sh
 
 cp -r ./github.com/noria-net/noria/x/* x/
 rm -rf ./github.com

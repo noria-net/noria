@@ -35,6 +35,8 @@ IMG="noria/noriad"
 NETWORK="noria_multinode"
 DIR=".multinode"
 NUM_VALIDATORS=$2
+RUN_AS_USER=" -u $(id -u):$(id -g) "
+CONTAINER_HOME=" --home /tmp/noria "
 
 ### ARGS VALIDATION
 
@@ -58,8 +60,8 @@ fi
 if [[ $1 == "clean" ]]; then
   rm -rf $DIR
   for ((i = 1; i <= $NUM_VALIDATORS; i++)); do
-    docker stop val$i
-    docker container rm val$i
+    docker stop val$i >/dev/null 2>&1
+    docker container rm val$i >/dev/null 2>&1
   done
   echo -e "\nCleaned up\n"
   exit 0
@@ -69,7 +71,7 @@ fi
 
 if [[ $1 == "stop" ]]; then
   for ((i = 1; i <= $NUM_VALIDATORS; i++)); do
-    docker stop val$i
+    docker stop val$i >/dev/null 2>&1
   done
   echo -e "\nNodes stopped\n"
   exit 0
@@ -81,13 +83,13 @@ if [[ $1 == "start" ]]; then
 
   if [[ $(docker network ls | grep -c "$NETWORK") -eq 0 ]]; then
     echo -e "\nCreating docker network..."
-    docker network create --subnet=172.172.0.0/16 $NETWORK
+    docker network create --subnet=172.172.0.0/16 $NETWORK >/dev/null 2>&1
   fi
 
-  docker run -d --name val1 -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app --net $NETWORK -p 1317:1317 -p 26657:26657 $IMG start
+  docker run $RUN_AS_USER -d --name val1 -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app --net $NETWORK -p 1317:1317 -p 26657:26657 $IMG $CONTAINER_HOME start >/dev/null 2>&1
   for ((i = 2; i <= $NUM_VALIDATORS; i++)); do
     KEY=val$i
-    docker run --name $KEY -d -v $(pwd)/$DIR/$KEY:/root/\.noria -v $(pwd):/app --net $NETWORK $IMG start
+    docker run $RUN_AS_USER --name $KEY -d -v $(pwd)/$DIR/$KEY:/tmp/noria -v $(pwd):/app --net $NETWORK $IMG $CONTAINER_HOME start >/dev/null 2>&1
   done
   echo -e "\nNetwork started\n"
   echo -e "\nTo stop: $0 stop $NUM_VALIDATORS\n"
@@ -99,17 +101,18 @@ fi
 if [[ $1 == "init" ]]; then
   rm -rf $DIR
   for ((i = 1; i <= $NUM_VALIDATORS; i++)); do
-    docker stop val$i
-    docker container rm val$i
+    docker stop val$i >/dev/null 2>&1
+    docker container rm val$i >/dev/null 2>&1
+    mkdir -p $DIR/val$i
   done
 
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG init val1 --chain-id oasis-3
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG config keyring-backend test
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG keys add val1 --output json >$DIR/val1/key.json
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis add-genesis-account val1 1000000000ucrd,1000000000unoria
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis gentx val1 100000000unoria --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01
-  ADDR=$(docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG keys show val1 -a)
-  PEER1=$(docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG tendermint show-node-id)
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME init val1 --chain-id oasis-3 >/dev/null 2>&1
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME config keyring-backend test
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME keys add val1 --output json >$DIR/val1/key.json
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis add-genesis-account val1 1000000000ucrd,1000000000unoria
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis gentx val1 100000000unoria --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01 >/dev/null 2>&1
+  ADDR=$(docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME keys show val1 -a)
+  PEER1=$(docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME tendermint show-node-id)
 
   update_genesis $DIR/val1/config
   update_configs $DIR/val1/config
@@ -118,28 +121,26 @@ if [[ $1 == "init" ]]; then
 
     KEY=val$i
 
-    docker run -v $(pwd)/$DIR/$KEY:/root/\.noria -v $(pwd):/app $IMG init $KEY --chain-id oasis-3
-    docker run -v $(pwd)/$DIR/$KEY:/root/\.noria -v $(pwd):/app $IMG config keyring-backend test
-    docker run -v $(pwd)/$DIR/$KEY:/root/\.noria -v $(pwd):/app $IMG keys add $KEY --output json >$DIR/$KEY/key.json
+    docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/$KEY:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME init $KEY --chain-id oasis-3 >/dev/null 2>&1
+    docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/$KEY:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME config keyring-backend test
+    docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/$KEY:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME keys add $KEY --output json >$DIR/$KEY/key.json
     update_configs $DIR/$KEY/config
     sed -i.bak 's/^persistent_peers\ =\ .*/persistent_peers\ =\ \"'$PEER1'@val1:26656\"/g' $DIR/$KEY/config/config.toml
 
     cp $DIR/val1/config/genesis.json $DIR/$KEY/config/genesis.json
-    docker run -v $(pwd)/$DIR/$KEY:/root/\.noria -v $(pwd):/app $IMG genesis add-genesis-account $KEY 1000000000ucrd,1000000000unoria
-    docker run -v $(pwd)/$DIR/$KEY:/root/\.noria -v $(pwd):/app $IMG genesis gentx $KEY 100000000unoria --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01
+    docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/$KEY:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis add-genesis-account $KEY 1000000000ucrd,1000000000unoria
+    docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/$KEY:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis gentx $KEY 100000000unoria --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01 >/dev/null 2>&1
     cp $DIR/$KEY/config/genesis.json $DIR/val1/config/genesis.json
     cp $DIR/$KEY/config/gentx/* $DIR/val1/config/gentx/
 
   done
 
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis collect-gentxs
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis collect-gentxs >/dev/null 2>&1
 
   for ((i = 2; i <= $NUM_VALIDATORS; i++)); do
     KEY=val$i
     cp $DIR/val1/config/genesis.json $DIR/$KEY/config/genesis.json
   done
-
-  chmod -R 777 $DIR
 
   echo -e "\nNodes initialized\n"
   echo -e "\nTo start: $0 start $NUM_VALIDATORS\n"

@@ -19,7 +19,7 @@ fi
 
 exe() {
   echo "EXECUTING: $@"
-  ./scripts/tx.sh "$@"
+  ./dev/scripts/tx.sh "$@"
 }
 
 # delegate to the validator through alliance
