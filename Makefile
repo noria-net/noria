@@ -126,12 +126,18 @@ clean:
 rebuild: clean build
 
 docker-build:
-	$(DOCKER) build -f ./docker/Dockerfile.build -t noria\:$(VERSION) . --network host; \
-	$(DOCKER) run --rm -v $(CURDIR)\:/code noria\:$(VERSION) make build;
+	$(DOCKER) build -f ./docker/Dockerfile.build -t noria_build\:$(VERSION) .; \
+	$(DOCKER) run --rm -v $(CURDIR)\:/code noria_build\:$(VERSION) make build;
 
-docker-test:
-	$(DOCKER) build -f ./docker/Dockerfile.test -t noria_test\:$(VERSION) .; \
-	$(DOCKER) run noria_test\:$(VERSION);
+docker-image:
+	$(DOCKER) build -f ./docker/Dockerfile -t noria/noriad .
+
+docker-hermes-image:
+	$(DOCKER) build -f ./docker/Dockerfile.hermes -t noria/hermes .
+
+docker-test: 
+	$(DOCKER) build -f ./docker/Dockerfile.test -t noria_test\:$(VERSION) .
+	$(DOCKER) run noria_test\:$(VERSION)
 
 script-lint:
 	@command -v shellcheck >/dev/null 2>&1 || { echo >&2 "shellcheck not found. Installing..."; sudo apt-get install shellcheck; }

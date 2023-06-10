@@ -1,0 +1,6 @@
+FROM rust:1.67
+SHELL ["/bin/bash", "-c"]
+
+RUN cargo install ibc-relayer-cli --bin hermes --locked
+
+ENTRYPOINT [ "hermes" ]
