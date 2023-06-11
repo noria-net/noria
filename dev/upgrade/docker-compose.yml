@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  noria-node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: noria/noriad:latest
+    environment:
+      - NORIA_FROM_VERSION=${NORIA_FROM_VERSION}
+      - NORIA_TO_VERSION=${NORIA_TO_VERSION}
+      - NORIA_UPGRADE_NAME=${NORIA_UPGRADE_NAME}
+    volumes:
+      - ./entrypoint.sh:/app/entrypoint.sh
+      - ../..:/current
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+      - "9090:9090"

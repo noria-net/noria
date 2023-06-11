@@ -30,15 +30,15 @@ update_configs() {
 }
 
 stop_nodes() {
-  docker stop hermes
-  docker stop val1
-  docker stop val2
+  docker stop hermes > /dev/null 2>&1
+  docker stop val1 > /dev/null 2>&1
+  docker stop val2 > /dev/null 2>&1
 }
 
 rm_nodes() {
-  docker container rm hermes
-  docker container rm val1
-  docker container rm val2
+  docker container rm hermes > /dev/null 2>&1
+  docker container rm val1 > /dev/null 2>&1
+  docker container rm val2 > /dev/null 2>&1
 }
 
 ### VARS
@@ -155,6 +155,8 @@ IMG="noria/noriad"
 NETWORK="noria_network"
 DIR=".network"
 NUM_VALIDATORS=2
+RUN_AS_USER=" -u $(id -u):$(id -g) "
+CONTAINER_HOME=" --home /tmp/noria "
 
 ### ARGS VALIDATION
 
@@ -192,14 +194,12 @@ if [[ $1 == "start" ]]; then
 
   if [[ $(docker network ls | grep -c "$NETWORK") -eq 0 ]]; then
     echo -e "\nCreating docker network..."
-    docker network create --subnet=172.173.0.0/16 $NETWORK
+    docker network create --subnet=172.173.0.0/16 $NETWORK > /dev/null 2>&1
   fi
 
   # Start nodes
-  docker run -d --name val1 -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app --net $NETWORK -p 1317:1317 -p 26657:26657 $IMG start
-  docker run -d --name val2 -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app --net $NETWORK -p 1318:1317 -p 26658:26657 $IMG start
-  echo -e "\nNetwork started\n"
-  echo -e "\nTo stop: $0 stop\n"
+  docker run $RUN_AS_USER -d --name val1 -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app --net $NETWORK -p 1317:1317 -p 26657:26657 $IMG $CONTAINER_HOME start > /dev/null 2>&1
+  docker run $RUN_AS_USER -d --name val2 -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app --net $NETWORK -p 1318:1317 -p 26658:26657 $IMG $CONTAINER_HOME start > /dev/null 2>&1
 
   echo -e "\nStarting relayer and creating channel...\n"
 
@@ -207,10 +207,10 @@ if [[ $1 == "start" ]]; then
   sleep 8
 
   # Create relayer channel
-  docker run -v $(pwd)/$DIR/val1/relayer:/root/\.hermes --net $NETWORK noria/hermes --config /root/.hermes/config.toml create channel --order unordered --a-chain oasis-3 --b-chain oasis-4 --a-port transfer --b-port transfer --new-client-connection --yes
+  docker run --rm -v $(pwd)/$DIR/val1/relayer:/root/\.hermes --net $NETWORK noria/hermes create channel --order unordered --a-chain oasis-3 --b-chain oasis-4 --a-port transfer --b-port transfer --new-client-connection --yes
 
   # Start relayer
-  docker run -d --name hermes -v $(pwd)/$DIR/val1/relayer:/root/\.hermes --net $NETWORK noria/hermes --config /root/.hermes/config.toml start
+  docker run -d --name hermes -v $(pwd)/$DIR/val1/relayer:/root/\.hermes --net $NETWORK noria/hermes start > /dev/null 2>&1
 
   echo -e "\nRelayer started\n"
   echo -e "\nFollow logs with: docker logs hermes -f\n"
@@ -221,51 +221,51 @@ fi
 ### INITIALIZING NODES
 
 if [[ $1 == "init" ]]; then
-  docker stop hermes
-  docker container rm hermes
-  for ((i = 1; i <= $NUM_VALIDATORS; i++)); do
-    docker stop val$i
-    docker container rm val$i
-  done
+  docker stop hermes > /dev/null 2>&1
+  docker container rm hermes > /dev/null 2>&1
   rm -rf $DIR
+  for ((i = 1; i <= $NUM_VALIDATORS; i++)); do
+    docker stop val$i > /dev/null 2>&1
+    docker container rm val$i > /dev/null 2>&1
+    mkdir -p $DIR/val$i
+  done
+  mkdir -p $DIR/val1/relayer
 
   # chain oasis-3
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG init val1 --chain-id oasis-3
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app --entrypoint /bin/bash $IMG -c 'mkdir -p /root/.noria/relayer'
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG config keyring-backend test
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG config chain-id oasis-3
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG keys add val1 --output json >$DIR/val1/key.json
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG keys add relayer --output json >$DIR/val1/relayer/relayer_key.json
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis add-genesis-account val1 1000000000ucrd,1000000000unoria
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis add-genesis-account relayer 1000000000ucrd,1000000000unoria
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis gentx val1 100000000unoria --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME init val1 --chain-id oasis-3 > /dev/null 2>&1
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME config keyring-backend test
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME config chain-id oasis-3
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME keys add val1 --output json >$DIR/val1/key.json
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME keys add relayer --output json >$DIR/val1/relayer/relayer_key.json
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis add-genesis-account val1 1000000000ucrd,1000000000unoria
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis add-genesis-account relayer 1000000000ucrd,1000000000unoria
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis gentx val1 100000000unoria --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01 > /dev/null 2>&1
 
   update_genesis $DIR/val1/config
   update_configs $DIR/val1/config
 
-  docker run -v $(pwd)/$DIR/val1:/root/\.noria -v $(pwd):/app $IMG genesis collect-gentxs
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis collect-gentxs > /dev/null 2>&1
 
   # chain oasis-4
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG init val2 --chain-id oasis-4
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG config keyring-backend test
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG config chain-id oasis-4
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG keys add val2 --output json >$DIR/val2/key.json
-  docker run -v $(pwd)/$DIR/val1:/tmp -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app --entrypoint /bin/bash $IMG -c 'cat /tmp/relayer/relayer_key.json  | jq -r '.mnemonic' | noriad keys add relayer --recover'
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG genesis add-genesis-account val2 1000000000ucrd,1000000000unoria
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG genesis add-genesis-account relayer 1000000000ucrd,1000000000unoria
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG genesis gentx val2 100000000unoria --chain-id oasis-4 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME init val2 --chain-id oasis-4 > /dev/null 2>&1
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME config keyring-backend test
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME config chain-id oasis-4
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME keys add val2 --output json >$DIR/val2/key.json
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val1:/tmp/val1 -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app --entrypoint /bin/bash $IMG -c "cat /tmp/val1/relayer/relayer_key.json  | jq -r '.mnemonic' | noriad $CONTAINER_HOME keys add relayer --recover"
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis add-genesis-account val2 1000000000ucrd,1000000000unoria
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis add-genesis-account relayer 1000000000ucrd,1000000000unoria
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis gentx val2 100000000unoria --chain-id oasis-4 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01 > /dev/null 2>&1
 
   update_genesis $DIR/val2/config
   update_configs $DIR/val2/config
 
-  docker run -v $(pwd)/$DIR/val2:/root/\.noria -v $(pwd):/app $IMG genesis collect-gentxs
+  docker run $RUN_AS_USER --rm -v $(pwd)/$DIR/val2:/tmp/noria -v $(pwd):/app $IMG $CONTAINER_HOME genesis collect-gentxs > /dev/null 2>&1
 
   # Hermes Relayer
   echo -e $HERMES_CONFIG >$DIR/val1/relayer/config.toml
-  docker run -v $(pwd)/$DIR/val1/relayer:/root/\.hermes noria/hermes keys add --chain oasis-3 --key-file /root/.hermes/relayer_key.json
-  docker run -v $(pwd)/$DIR/val1/relayer:/root/\.hermes noria/hermes keys add --chain oasis-4 --key-file /root/.hermes/relayer_key.json
-
-  chmod -R 777 $DIR
+  docker run --rm -v $(pwd)/$DIR/val1/relayer:/root/\.hermes noria/hermes keys add --chain oasis-3 --key-file /root/.hermes/relayer_key.json > /dev/null 2>&1
+  docker run --rm -v $(pwd)/$DIR/val1/relayer:/root/\.hermes noria/hermes keys add --chain oasis-4 --key-file /root/.hermes/relayer_key.json > /dev/null 2>&1
+  docker run --rm -v $(pwd)/$DIR/val1/relayer:/root/\.hermes --entrypoint /bin/bash noria/hermes -c "chown -R $(id -u):$(id -g) /root/.hermes"
 
   echo -e "\nNodes initialized\n"
   echo -e "\nTo start: $0 start\n"
