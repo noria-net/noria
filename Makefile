@@ -143,7 +143,7 @@ docker-test:
 	$(DOCKER) run --rm noria_test\:$(VERSION)
 
 multinodes_start:
-	@[ ! $(shell docker images -q noria/noriad:latest 2> /dev/null) ] && make docker-image
+	@[ ! $(shell docker images -q noria/noriad:latest 2> /dev/null) ] && make docker-image || true
 	@echo "Initializing 3 nodes"
 	@echo "Please wait..."
 	@./dev/scripts/multinodes.sh init 3 1>/dev/null 
@@ -161,8 +161,8 @@ multinodes_stop:
 	@./dev/scripts/multinodes.sh clean 3
 
 network_start:
-	@[ ! $(shell docker images -q noria/noriad:latest 2> /dev/null) ] && make docker-image
-	@[ ! $(shell docker images -q noria/hermes:latest 2> /dev/null) ] && make docker-hermes-image
+	@[ ! $(shell docker images -q noria/noriad:latest 2> /dev/null) ] && make docker-image || true
+	@[ ! $(shell docker images -q noria/hermes:latest 2> /dev/null) ] && make docker-hermes-image || true
 	@echo "Initializing 2 nodes and 1 hermes relayer"
 	@echo "Please wait..."
 	@./dev/scripts/network.sh init 1>/dev/null 
