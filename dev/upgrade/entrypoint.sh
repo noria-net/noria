@@ -45,6 +45,10 @@ export DAEMON_ALLOW_DOWNLOAD_BINARIES=false
 # Make voting period shorter for rapid testing
 sed -i.bak 's/"voting_period": "[^"]*"/"voting_period": "8s"/g' $DAEMON_HOME/config/genesis.json >/dev/null 2>&1
 
+# Open ports for Docker passthrough
+sed -i.bak 's/localhost/0.0.0.0/g' $DAEMON_HOME/config/app.toml >/dev/null 2>&1
+sed -i.bak 's/127\.0\.0\.1/0.0.0.0/g' $DAEMON_HOME/config/config.toml >/dev/null 2>&1
+
 # Move both FROM noriad and TO noriad to the cosmovisor folder, ready for upgrade
 mkdir -p $DAEMON_HOME/cosmovisor/genesis/bin
 cp $(which $DAEMON_NAME) $DAEMON_HOME/cosmovisor/genesis/bin/
