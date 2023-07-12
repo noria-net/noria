@@ -37,7 +37,7 @@ noriad init me --overwrite --chain-id $CHAIN_ID
 noriad genesis add-genesis-account me 1000000000$GAS_PRICE_DENOM,1000000000$DENOM
 
 # Generate the genesis transaction to create a new validator
-noriad genesis gentx me 100000000$DENOM --chain-id oasis-3 --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01
+noriad genesis gentx me 100000000$DENOM --chain-id $CHAIN_ID --commission-rate 0.1 --commission-max-rate 0.2 --commission-max-change-rate 0.01
 
 # Add that gentx transaction to the genesis file
 noriad genesis collect-gentxs

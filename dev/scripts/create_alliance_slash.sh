@@ -2,7 +2,7 @@
 
 AMOUNT=$1
 NEW_DENOM=$2
-KEY_NAME="me"
+KEY_NAME="val1"
 BINARY_DIR=".noria"
 CHAIN_ID="oasis-3"
 DENOM="unoria"
@@ -50,5 +50,9 @@ exe $DAEMON_NAME tx gov vote $PROPOSAL_ID yes --from $KEY_NAME --chain-id $CHAIN
 sleep 5
 
 # delegate to the validator through alliance
-VAL=$($DAEMON_NAME q staking validators --output json | jq '.validators[0].operator_address' | sed 's/\"//g')
-exe noriad tx alliance delegate $VAL $AMOUNT$NEW_DENOM --from $KEY_NAME --fees 1000ucrd
+VAL=$($DAEMON_NAME q staking validators --output json | jq '.validators[] | select(.description.moniker | contains("val2")).operator_address' | sed 's/\"//g')
+exe noriad tx alliance delegate $VAL $AMOUNT$NEW_DENOM --from $KEY_NAME --chain-id $CHAIN_ID --home $DAEMON_HOME --node $NODE --yes --gas-prices $GAS_PRICE$GAS_PRICE_DENOM --gas auto --gas-adjustment 1.75
+
+
+# VAL=$($DAEMON_NAME q staking validators --output json | jq '.validators[] | select(.description.moniker | contains("val3")).operator_address' | sed 's/\"//g')
+# exe noriad tx alliance delegate $VAL $AMOUNT$NEW_DENOM --from $KEY_NAME --chain-id $CHAIN_ID --home $DAEMON_HOME --node $NODE --yes --gas-prices $GAS_PRICE$GAS_PRICE_DENOM --gas auto --gas-adjustment 1.75

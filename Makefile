@@ -142,6 +142,13 @@ docker-test:
 	$(DOCKER) build -f ./dev/docker/Dockerfile.test -t noria_test\:$(VERSION) .
 	$(DOCKER) run --rm noria_test\:$(VERSION)
 
+slash-test:
+	@[ ! $(shell docker images -q noria/noriad:latest 2> /dev/null) ] && make docker-image || true
+	@echo "Initializing 4 nodes"
+	@echo "Please wait..."
+	@./dev/scripts/slash_test.sh 1>/dev/null 
+
+
 multinodes_start:
 	@[ ! $(shell docker images -q noria/noriad:latest 2> /dev/null) ] && make docker-image || true
 	@echo "Initializing 3 nodes"

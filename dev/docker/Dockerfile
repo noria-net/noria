@@ -3,7 +3,21 @@ SHELL ["/bin/bash", "-c"]
 
 RUN apt-get update && apt-get install -y jq
 
-COPY . /app
+# When testing noria only
+
+# COPY . /app
+
+# or, instead
+
+# When testing noria with local modules (run from parent directory)
+# Copy the noria repo in the docker container
+
+COPY ./noria /app
+
+# Copy the dev modules in the docker container
+
+COPY ./alliance /alliance
+
 WORKDIR /app
 
 # Set go envs
