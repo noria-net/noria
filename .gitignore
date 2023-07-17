@@ -12,3 +12,4 @@ tools/
 package/
 .multinode
 .network
+*.swp

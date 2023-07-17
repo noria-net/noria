@@ -155,6 +155,10 @@ import (
 	adminmodulekeeper "github.com/noria-net/module-admin/x/admin/keeper"
 	adminmoduletypes "github.com/noria-net/module-admin/x/admin/types"
 
+	membershipmodule "github.com/noria-net/module-membership/x/membership"
+	membershipmodulekeeper "github.com/noria-net/module-membership/x/membership/keeper"
+	membershipmoduletypes "github.com/noria-net/module-membership/x/membership/types"
+
 	// unnamed import of statik for swagger UI support
 	_ "github.com/noria-net/noria/statik"
 )
@@ -329,6 +333,7 @@ type WasmApp struct {
 	TokenFactoryKeeper  tokenfactorymodulekeeper.Keeper
 	AllianceKeeper      alliancemodulekeeper.Keeper
 	AdminKeeper         adminmodulekeeper.Keeper
+	MembershipKeeper    membershipmodulekeeper.Keeper
 
 	// IBC hooks
 	IBCHooksKeeper   *ibchookskeeper.Keeper
@@ -604,6 +609,24 @@ func NewWasmApp(
 		),
 	)
 
+	// NB: This *must* appear after govKeeper.SetHooks, because membershipmoduletypes.NewExtendedGovKeeper()
+	// will take a snapshot of the hooks added and keep them for calls made during proposal calculations
+	extendedGovKeeper := membershipmoduletypes.NewExtendedGovKeeper(app.GovKeeper)
+	app.MembershipKeeper = *membershipmodulekeeper.NewKeeper(
+		appCodec,
+		keys[membershipmoduletypes.StoreKey],
+		keys[membershipmoduletypes.MemStoreKey],
+		app.GetSubspace(membershipmoduletypes.ModuleName),
+		app.AccountKeeper,
+		extendedGovKeeper,
+	)
+	membershipModule := membershipmodule.NewAppModule(
+		appCodec,
+		app.MembershipKeeper,
+		app.AccountKeeper,
+		extendedGovKeeper,
+	)
+
 	app.NFTKeeper = nftkeeper.NewKeeper(
 		keys[nftkeeper.StoreKey],
 		appCodec,
@@ -807,6 +830,7 @@ func NewWasmApp(
 		ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper),
 		ibchooks.NewAppModule(app.AccountKeeper),
 		adminModule,
+		membershipModule,
 		crisis.NewAppModule(app.CrisisKeeper, skipGenesisInvariants, app.GetSubspace(crisistypes.ModuleName)), // always be last to make sure that it checks for all invariants and not only part of them
 	)
 
@@ -818,7 +842,10 @@ func NewWasmApp(
 	app.ModuleManager.SetOrderBeginBlockers(
 		upgradetypes.ModuleName, capabilitytypes.ModuleName, minttypes.ModuleName, distrtypes.ModuleName, slashingtypes.ModuleName,
 		evidencetypes.ModuleName, stakingtypes.ModuleName,
-		authtypes.ModuleName, banktypes.ModuleName, govtypes.ModuleName, crisistypes.ModuleName, genutiltypes.ModuleName,
+		authtypes.ModuleName, banktypes.ModuleName,
+		membershipmoduletypes.ModuleName,
+		govtypes.ModuleName,
+		crisistypes.ModuleName, genutiltypes.ModuleName,
 		authz.ModuleName, feegrant.ModuleName, nft.ModuleName, group.ModuleName,
 		paramstypes.ModuleName, vestingtypes.ModuleName, consensusparamtypes.ModuleName,
 		// additional non simd modules
@@ -839,7 +866,9 @@ func NewWasmApp(
 		This way, we can completely remove the staking module from the endblocker order, and bake the logic into the alliance endblocker.
 	*/
 	app.ModuleManager.OrderEndBlockers = []string{
-		crisistypes.ModuleName, govtypes.ModuleName,
+		crisistypes.ModuleName,
+		membershipmoduletypes.ModuleName,
+		govtypes.ModuleName,
 		// stakingtypes.ModuleName, // removed and logic baked into the alliance endblocker
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName,
 		slashingtypes.ModuleName, minttypes.ModuleName,
@@ -885,6 +914,7 @@ func NewWasmApp(
 		tokenfactorymoduletypes.ModuleName,
 		alliancemoduletypes.ModuleName,
 		adminmoduletypes.ModuleName,
+		membershipmoduletypes.ModuleName,
 	}
 	app.ModuleManager.SetOrderInitGenesis(genesisModuleOrder...)
 	app.ModuleManager.SetOrderExportGenesis(genesisModuleOrder...)
@@ -1215,6 +1245,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(wasm.ModuleName)
 	paramsKeeper.Subspace(alliancemoduletypes.ModuleName)
 	paramsKeeper.Subspace(adminmoduletypes.ModuleName)
+	paramsKeeper.Subspace(membershipmoduletypes.ModuleName)
 
 	return paramsKeeper
 }
