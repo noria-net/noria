@@ -46,7 +46,7 @@ ifeq ($(LEDGER_ENABLED),true)
 endif
 
 ifeq (cleveldb,$(findstring cleveldb,$(COSMOS_BUILD_OPTIONS)))
-	build_tags += gcc
+	build_tags += gcc cleveldb
 endif
 build_tags += $(BUILD_TAGS)
 build_tags := $(strip $(build_tags))
